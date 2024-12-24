@@ -19,14 +19,14 @@ const dropdownOpen = ref({ products: false, orders: false });
             <div class="h-16 flex items-center justify-center bg-gray-900 text-lg font-semibold">
                 Product Management
             </div>
-            <nav class="mt-4 space-y-2">
-                <Link :href="route ('dashboard')" class="block px-4 py-2 hover:bg-gray-700">Dashboard</Link>
+            <nav style=" font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="mt-4 space-y-2">
+                <Link :href="route ('dashboard')" class="block px-4 py-2 hover:bg-gray-700">ড্যাশবোর্ড</Link>
                 <div>
                     <button
                         @click="dropdownOpen.products = !dropdownOpen.products"
                         class="w-full flex justify-between items-center px-4 py-2 hover:bg-gray-700"
                     >
-                        Products
+                    মারহালা
                         <svg
                             class="w-4 h-4 transition-transform"
                             :class="{'rotate-180': dropdownOpen.products}"
@@ -42,9 +42,9 @@ const dropdownOpen = ref({ products: false, orders: false });
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.products" class="pl-6">
-                        <Link :href="route('products')" class="block px-4 py-2 hover:bg-gray-700">All product</Link>
+                        <Link :href="route('marhala.products')" class="block px-4 py-2 hover:bg-gray-700">ফযিলত</Link>
 
-                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">Add Product</Link>
+                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সানবিয়া</Link>
                     </div>
                 </div>
                 <div>
@@ -52,7 +52,7 @@ const dropdownOpen = ref({ products: false, orders: false });
                         @click="dropdownOpen.orders = !dropdownOpen.orders"
                         class="w-full flex justify-between items-center px-4 py-2 hover:bg-gray-700"
                     >
-                        Orders
+                      আবেদন
                         <svg
                             class="w-4 h-4 transition-transform"
                             :class="{'rotate-180': dropdownOpen.orders}"
@@ -68,8 +68,8 @@ const dropdownOpen = ref({ products: false, orders: false });
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.orders" class="pl-6">
-                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">All Orders</Link>
-                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">Pending Orders</Link>
+                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">আবেদনের তালিকা</Link>
+                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">আবেদন </Link>
                     </div>
                 </div>
                 <Link href="#" class="block px-4 py-2 hover:bg-gray-700">Customers</Link>

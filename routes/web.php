@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 
-use app\Http\Controllers\porductController;
+use App\Http\Controllers\porductController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,9 +20,9 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/product/products', function () {
-    return Inertia::render('product/products');
-})->middleware(['auth', 'verified'])->name('products');
+// Route::get('/marhala/products', function () {
+//     return Inertia::render('marhala/products');
+// })->middleware(['auth', 'verified'])->name('products');
 
 
 
@@ -35,11 +35,10 @@ Route::middleware('auth')->group(function () {
 
 
 
-// product routes
-
-Route::get('/product/products', [porductController::class,'show'])->name('products');
+// others routers
 
 
+Route::get('/marhala/products', [porductController::class, 'demo'])->name('marhala.products');
 
 
 
