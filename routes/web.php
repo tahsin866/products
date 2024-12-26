@@ -40,12 +40,11 @@ Route::middleware('auth')->group(function () {
 // others routers
 // fazilat Router
 
+// Route::get('/marhala/fazilat', [fazilatController::class, 'demo'])->name('marhala.fazilat');
+//  Route::get('/student-count', [FazilatController::class, 'count'])->name('student.count');
+//  Route::post('/search-student', [fazilatController::class, 'search'])->name('search-student.post');
+
 Route::get('/marhala/fazilat', [fazilatController::class, 'demo'])->name('marhala.fazilat');
- Route::get('/marhala/fazilatDetailes', [fazilatController::class, 'detailes'])->name('marhala.fazilatDetailes');
- Route::get('/fazilat-details/{Roll}', [fazilatController::class, 'show'])->name('fazilat-details.show');
-
- Route::post('/search-student', [fazilatController::class, 'search'])->name('search-student.post');
-
 
 
 Route::get('/marhala/sanawaia', [sanawiaController::class, 'sanawia'])->name('marhala.sanawaia');

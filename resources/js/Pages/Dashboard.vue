@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref, computed } from "vue";
 
-
 const categories = ref([
   {
     id: 1,
@@ -48,64 +47,83 @@ const filteredCategories = computed(() => {
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    <!-- Card 1 -->
-    <div class="bg-white shadow rounded-lg p-4 flex items-center">
-      <div class="bg-purple-100 p-3 rounded-full">
-        <svg class="w-6 h-6 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  <!-- Card 1 -->
+  <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+    <div class="flex items-center space-x-6">
+      <div class="bg-purple-100 p-4 rounded-xl shadow-inner">
+        <svg class="w-10 h-10 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 5l3 3m0 0l-3 3m3-3H9m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
-      <div class="ml-4">
-        <h4 class="text-xl font-semibold text-gray-800">42</h4>
-        <p class="text-gray-500 text-sm">On route vehicles</p>
-        <p class="text-green-500 text-sm">18.2% than last week</p>
-      </div>
-    </div>
-
-    <!-- Card 2 -->
-    <div class="bg-white shadow rounded-lg p-4 flex items-center">
-      <div class="bg-yellow-100 p-3 rounded-full">
-        <svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 1.343 3 3 0 1.657-1.343 3-3 3s-3-1.343-3-3c0-1.657 1.343-3 3-3zm0 8c4.418 0 8 1.791 8 4v2H4v-2c0-2.209 3.582-4 8-4z" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <h4 class="text-xl font-semibold text-gray-800">8</h4>
-        <p class="text-gray-500 text-sm">Vehicles with errors</p>
-        <p class="text-red-500 text-sm">-8.7% than last week</p>
-      </div>
-    </div>
-
-    <!-- Card 3 -->
-    <div class="bg-white shadow rounded-lg p-4 flex items-center">
-      <div class="bg-red-100 p-3 rounded-full">
-        <svg class="w-6 h-6 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 005.656 5.656M14.828 9.172a4 4 0 00-5.656 5.656M12 4v1m0 14v1m8-8h1M4 12H3m17.364 6.364l.707-.707M6.343 6.343l-.707-.707m12.728 12.728l.707.707M6.343 17.657l-.707.707" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <h4 class="text-xl font-semibold text-gray-800">27</h4>
-        <p class="text-gray-500 text-sm">Deviated from route</p>
-        <p class="text-green-500 text-sm">4.3% than last week</p>
-      </div>
-    </div>
-
-    <!-- Card 4 -->
-    <div class="bg-white shadow rounded-lg p-4 flex items-center">
-      <div class="bg-blue-100 p-3 rounded-full">
-        <svg class="w-6 h-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v5h6v-5m-3-4v5m3-9h2a2 2 0 012 2v6a2 2 0 01-2 2h-2m-4 0H9a2 2 0 01-2-2v-6a2 2 0 012-2h2m0 0V5a2 2 0 014 0v4" />
-        </svg>
-      </div>
-      <div class="ml-4">
-        <h4 class="text-xl font-semibold text-gray-800">13</h4>
-        <p class="text-gray-500 text-sm">Late vehicles</p>
-        <p class="text-red-500 text-sm">-2.5% than last week</p>
+      <div>
+        <div class="flex items-center space-x-1">
+          <h4 class="text-3xl font-bold text-gray-800">42</h4>
+          <span class="text-green-500 text-sm font-semibold">+18.2%</span>
+        </div>
+        <p class="text-gray-600 font-medium mt-1">On Route Vehicles</p>
+        <p class="text-green-500 text-sm font-medium mt-1">↑ Up from last week</p>
       </div>
     </div>
   </div>
 
+  <!-- Card 2 -->
+  <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+    <div class="flex items-center space-x-6">
+      <div class="bg-yellow-100 p-4 rounded-xl shadow-inner">
+        <svg class="w-10 h-10 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 1.343 3 3 0 1.657-1.343 3-3 3s-3-1.343-3-3c0-1.657 1.343-3 3-3zm0 8c4.418 0 8 1.791 8 4v2H4v-2c0-2.209 3.582-4 8-4z" />
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center space-x-1">
+          <h4 class="text-3xl font-bold text-gray-800">8</h4>
+          <span class="text-red-500 text-sm font-semibold">-8.7%</span>
+        </div>
+        <p class="text-gray-600 font-medium mt-1">Vehicles with Errors</p>
+        <p class="text-red-500 text-sm font-medium mt-1">↓ Down from last week</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+    <div class="flex items-center space-x-6">
+      <div class="bg-red-100 p-4 rounded-xl shadow-inner">
+        <svg class="w-10 h-10 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 005.656 5.656M14.828 9.172a4 4 0 00-5.656 5.656M12 4v1m0 14v1m8-8h1M4 12H3m17.364 6.364l.707-.707M6.343 6.343l-.707-.707m12.728 12.728l.707.707M6.343 17.657l-.707.707" />
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center space-x-1">
+          <h4 class="text-3xl font-bold text-gray-800">27</h4>
+          <span class="text-green-500 text-sm font-semibold">+4.3%</span>
+        </div>
+        <p class="text-gray-600 font-medium mt-1">Deviated from Route</p>
+        <p class="text-green-500 text-sm font-medium mt-1">↑ Up from last week</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4 -->
+  <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
+    <div class="flex items-center space-x-6">
+      <div class="bg-blue-100 p-4 rounded-xl shadow-inner">
+        <svg class="w-10 h-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v5h6v-5m-3-4v5m3-9h2a2 2 0 012 2v6a2 2 0 01-2 2h-2m-4 0H9a2 2 0 01-2-2v-6a2 2 0 012-2h2m0 0V5a2 2 0 014 0v4" />
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center space-x-1">
+          <h4 class="text-3xl font-bold text-gray-800">13</h4>
+          <span class="text-red-500 text-sm font-semibold">-2.5%</span>
+        </div>
+        <p class="text-gray-600 font-medium mt-1">Late Vehicles</p>
+        <p class="text-red-500 text-sm font-medium mt-1">↓ Down from last week</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
