@@ -4,7 +4,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, usePage } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
 import { Inertia } from '@inertiajs/inertia'
-import tabs from './tabs.vue'
+import { Link } from '@inertiajs/vue3';
+// import { convertToBangla } from '@/utils/numberToBangla';
+
+
 import Dashboard from '../Dashboard.vue'
 
 const props = defineProps({
@@ -12,8 +15,21 @@ const props = defineProps({
     years: Array,
     filters: Object,
     studentCount: Number,
-    yearCount: Number
-});
+    yearCount: Number,
+    maleCount: Number,
+    femaleCount: Number
+})
+
+const yearCount = ref(props.yearCount || 0);
+const maleCount = ref(props.maleCount || 0);
+const femaleCount = ref(props.femaleCount || 0);
+
+
+
+
+
+
+
 
 
 
@@ -68,18 +84,20 @@ const filterByYear = () => {
         route('marhala.fazilat'),
         {
             year: selectedYear.value,
-            page: 1  // Reset to first page on year change
+            page: 1
         },
         {
             preserveState: true,
             preserveScroll: true,
             onSuccess: (page) => {
-                students.value = page.props.students; // Update students data reactively
+                students.value = page.props.students;
+                yearCount.value = page.props.yearCount;
+                maleCount.value = page.props.maleCount;
+                femaleCount.value = page.props.femaleCount;
             },
         }
     );
 };
-
 
 // searchFiled
 
@@ -100,6 +118,7 @@ onMounted(() => {
         years: years.value
     })
 })
+
 </script>
 
 
@@ -110,96 +129,115 @@ onMounted(() => {
 
     <Head title="Dashboard" />
     <AuthenticatedLayout>
-        <tabs>
 
-
-        </tabs>
         <!-- card -->
-        <div style=" font-family: 'Merriweather','SolaimanLipi',sans-serif;"
-            class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Card 1 -->
-            <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                <div class="flex items-center space-x-6">
-                    <div class="bg-purple-100 p-4 rounded-xl shadow-inner">
-                        <svg class="w-10 h-10 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c1.657 0 3 1.343 3 3 0 1.657-1.343 3-3 3s-3-1.343-3-3c0-1.657 1.343-3 3-3zm0 8c4.418 0 8 1.791 8 4v2H4v-2c0-2.209 3.582-4 8-4z" />
-                        </svg>
+        <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+         class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Total Students Card -->
+        <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 border border-purple-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-purple-900">{{ props.studentCount }}</h4>
+                        <span class="text-purple-600 text-sm font-semibold">মোট</span>
                     </div>
-                    <div class="ml-4">
-                        <div class="flex items-center">
-                            <h4 class="text-3xl font-bold text-gray-800">{{ props.studentCount }}</h4>
-                        </div>
-                        <p class="text-gray-600 font-medium mt-1">মোট ছাত্র</p>
-                        <p class="text-green-500 text-sm font-medium mt-1">↑ গত সপ্তাহের তুলনায়</p>
-                    </div>
+                    <p class="text-purple-900 font-medium">মোট ছাত্র-ছাত্রী</p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
                 </div>
             </div>
-
-            <!-- Card 2 -->
-            <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                <div class="flex items-center space-x-6">
-                    <div class="bg-yellow-100 p-4 rounded-xl shadow-inner">
-                        <svg class="w-10 h-10 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c1.657 0 3 1.343 3 3 0 1.657-1.343 3-3 3s-3-1.343-3-3c0-1.657 1.343-3 3-3zm0 8c4.418 0 8 1.791 8 4v2H4v-2c0-2.209 3.582-4 8-4z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-1">
-                            <h4 class="text-3xl font-bold text-gray-800">8</h4>
-                            <span class="text-red-500 text-sm font-semibold">-8.7%</span>
-                        </div>
-                        <p class="text-gray-600 font-medium mt-1">ছাত্র সংখ্যা</p>
-                        <p class="text-red-500 text-sm font-medium mt-1">↓ গত সপ্তাহের তুলনায়</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                <div class="flex items-center space-x-6">
-                    <div class="bg-red-100 p-4 rounded-xl shadow-inner">
-                        <svg class="w-10 h-10 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9.172 9.172a4 4 0 005.656 5.656M14.828 9.172a4 4 0 00-5.656 5.656M12 4v1m0 14v1m8-8h1M4 12H3m17.364 6.364l.707-.707M6.343 6.343l-.707-.707m12.728 12.728l.707.707M6.343 17.657l-.707.707" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-1">
-                            <h4 class="text-3xl font-bold text-gray-800">27</h4>
-                            <span class="text-green-500 text-sm font-semibold">+4.3%</span>
-                        </div>
-                        <p class="text-gray-600 font-medium mt-1">ছাত্রী সংখ্যা</p>
-                        <p class="text-green-500 text-sm font-medium mt-1">↑ গত সপ্তাহের তুলনায়</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-white shadow-xl rounded-xl p-6 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                <div class="flex items-center space-x-6">
-                    <div class="bg-blue-100 p-4 rounded-xl shadow-inner">
-                        <svg class="w-10 h-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 17v5h6v-5m-3-4v5m3-9h2a2 2 0 012 2v6a2 2 0 01-2 2h-2m-4 0H9a2 2 0 01-2-2v-6a2 2 0 012-2h2m0 0V5a2 2 0 014 0v4" />
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-1">
-                            <h4 class="text-3xl font-bold text-gray-800">{{ yearCount }}</h4>
-
-                        </div>
-                        <p class="text-gray-600 font-medium mt-1">{{ selectedYear }} সালের মোট ছাত্র</p>
-                        <p class="text-red-500 text-sm font-medium mt-1">↓ গত সপ্তাহের তুলনায়</p>
-                    </div>
-                </div>
+            <div class="mt-4 pt-4 border-t border-purple-100">
+                <!-- <div class="flex items-center text-sm text-purple-600">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span>১২% বৃদ্ধি গত মাস থেকে</span>
+                </div> -->
             </div>
         </div>
+
+        <!-- Male Students Card -->
+        <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-blue-900">{{ props.maleCount }}</h4>
+                        <span class="text-blue-600 text-sm font-semibold">জন</span>
+                    </div>
+                    <p class="text-blue-900 font-medium">ছাত্র সংখ্যা</p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-blue-100">
+                <!-- <div class="flex items-center text-sm text-blue-600">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span>৮% বৃদ্ধি গত মাস থেকে</span>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Female Students Card -->
+        <div class="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-6 border border-pink-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-pink-900">{{ props.femaleCount }}</h4>
+                        <span class="text-pink-600 text-sm font-semibold">জন</span>
+                    </div>
+                    <p class="text-pink-900 font-medium">ছাত্রী সংখ্যা</p>
+                </div>
+                <div class="bg-pink-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-pink-100">
+                <!-- <div class="flex items-center text-sm text-pink-600">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span>১৫% বৃদ্ধি গত মাস থেকে</span>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Year Total Card -->
+        <div class="bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 border border-emerald-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-emerald-900">{{ yearCount }}</h4>
+                        <span class="text-emerald-600 text-sm font-semibold">জন</span>
+                    </div>
+                    <p class="text-emerald-900 font-medium">{{ selectedYear }} সালের মোট</p>
+                </div>
+                <div class="bg-emerald-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-emerald-100">
+                <!-- <div class="flex items-center text-sm text-emerald-600">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span>২০% বৃদ্ধি গত বছর থেকে</span>
+                </div> -->
+            </div>
+        </div>
+    </div>
 
 
 
@@ -220,26 +258,78 @@ onMounted(() => {
                         Export
                     </button>
                 </div>
-                <div class="flex justify-between items-center mb-4">
-                    <div class="grid grid-cols-4 gap-4 w-full">
-                        <select v-if="years.length > 0" @change="filterByYear" v-model="selectedYear"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-500 focus:outline-none">
-                            <option value="">Select Year</option>
-                            <option v-for="year in years" :key="year" :value="year">
-                                {{ year }}
-                            </option>
-                        </select>
+                <div class="flex justify-between items-center mb-6">
+        <div
+        style=" font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+        class="flex items-center space-x-4 w-full">
+            <!-- Year Selection -->
+            <select
+                v-if="years.length > 0"
+                @change="filterByYear"
+                v-model="selectedYear"
+                class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+            >
+                <option value="">বছর নির্বাচন করুন</option>
+                <option v-for="year in years" :key="year" :value="year">
+                    {{ year }}
+                </option>
+            </select>
 
-                        <input type="text" id="red_id" v-model="form.Roll" placeholder="ইলহাক লিখুন"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-500 focus:outline-none" />
-                        <input type="text" id="red_id" v-model="form.red_id" placeholder="ইলহাক লিখুন"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-purple-500 focus:outline-none" />
-                        <button @click="searchStudent"
-                            class="px-4 py-2 bg-gray-100 border border-gray-300 text-gray-600 rounded-lg mr-2 btn-sm">
-                            Search
-                        </button>
-                    </div>
-                </div>
+            <!-- Class Selection -->
+            <select
+                v-if="years.length > 0"
+                @change="filterByYear"
+                v-model="selectedYear"
+                class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+            >
+                <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                <option v-for="year in years" :key="year" :value="year">
+                    {{ year }}
+                </option>
+            </select>
+
+            <!-- Roll Input -->
+            <div class="relative flex-1">
+                <input
+                    type="text"
+                    v-model="form.Roll"
+                    placeholder="রোল নম্বর লিখুন"
+                    style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                />
+            </div>
+
+            <!-- Registration Input -->
+            <div class="relative flex-1">
+                <input
+                    type="text"
+                    v-model="form.red_id"
+                    placeholder="রেজিস্ট্রেশন নম্বর লিখুন"
+                    style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                />
+            </div>
+
+            <!-- Search Button -->
+            <button
+                @click="searchStudent"
+                class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center space-x-2 shadow-sm"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>অনুসন্ধান</span>
+            </button>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
 
                 <table style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
                     class="table-auto w-full border-collapse border border-gray-200">
@@ -257,7 +347,7 @@ onMounted(() => {
                             <th class="border border-gray-200 px-4 py-2 text-center">জন্মতারিখ</th>
                             <th class="border border-gray-200 px-4 py-2 text-center">রোল</th>
                             <th class="border border-gray-200 px-4 py-2 text-center">রেজিস্ট্রেশন</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">একশন</th>
+                            <th class="border border-gray-200 px-4 py-2 text-center">বিস্তারিত</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,8 +368,19 @@ onMounted(() => {
                             <td class="border border-gray-200 px-4 py-2 text-center">{{ student.Roll }}</td>
                             <td class="border border-gray-200 px-4 py-2 text-center">{{ student.reg_id }}</td>
                             <td class="border border-gray-200 px-4 py-2 text-center">
-                                <button class="text-purple-500 hover:underline focus:outline-none">Edit</button>
-                            </td>
+                                <Link
+    :href="route('marhala.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })"
+    class="text-purple-500 hover:underline focus:outline-none inline-flex items-center gap-1"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c-4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+</Link>
+
+
+</td>
+
                         </tr>
                     </tbody>
                 </table>

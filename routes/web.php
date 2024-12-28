@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
 //  Route::post('/search-student', [fazilatController::class, 'search'])->name('search-student.post');
 
 Route::get('/marhala/fazilat', [fazilatController::class, 'demo'])->name('marhala.fazilat');
+Route::get('/marhala/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('marhala.fazilatDetailes');
+
 
 
 Route::get('/marhala/sanawaia', [sanawiaController::class, 'sanawia'])->name('marhala.sanawaia');
