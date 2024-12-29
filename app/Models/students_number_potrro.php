@@ -10,6 +10,19 @@ use App\Models\student;
 class students_number_potrro extends Model
 {
 
+    protected $fillable = [
+        'Name',
+        'BirthRegistrationNo_nid_no',
+        'st_en_name',
+        'Father',
+        'mobileNumber',
+        'st_en_Fname',
+        'DateofBirth'
+    ];
+
+
+
+
     protected $table = 'students_number_potrro';
     public $timestamps = false; // Add this if you don't have timestamp columns
 

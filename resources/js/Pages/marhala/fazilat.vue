@@ -17,7 +17,8 @@ const props = defineProps({
     studentCount: Number,
     yearCount: Number,
     maleCount: Number,
-    femaleCount: Number
+    femaleCount: Number,
+
 })
 
 const yearCount = ref(props.yearCount || 0);
@@ -26,31 +27,6 @@ const femaleCount = ref(props.femaleCount || 0);
 
 
 
-
-
-
-
-
-
-
-const searchStudent = () => {
-    router.get(
-        route('marhala.fazilat'),
-        {
-            Roll: form.value.Roll,
-            reg_id: form.value.reg_id,
-            year: selectedYear.value,
-            page: 1
-        },
-        {
-            preserveState: true,
-            preserveScroll: true,
-            onSuccess: (page) => {
-                students.value = page.props.students;
-            },
-        }
-    );
-};
 
 
 
@@ -99,12 +75,47 @@ const filterByYear = () => {
     );
 };
 
+
+// const selectedSRType = ref('')
+
+// const filterBySRtype = () => {
+//     router.get(
+//         route('marhala.filterBySRType'),
+//         {
+//             SRType: selectedSRType.value,
+//             page: 1
+//         },
+//         {
+//             preserveState: true,
+//             preserveScroll: true,
+//             onSuccess: (page) => {
+//                 students.value = page.props.students
+//             }
+//         }
+//     )
+// }
+
+
 // searchFiled
 
-const form = ref({
-    Roll: "",
-    reg_id: "",
-});
+
+
+const Roll = ref('')
+const reg_id = ref('')
+
+const searchStudent = () => {
+    Inertia.get(route('marhala.search'), {
+        Roll: Roll.value,
+        reg_id: reg_id.value
+    }, {
+        preserveState: true,
+        preserveScroll: true
+    })
+}
+
+
+
+
 
 
 
@@ -251,154 +262,142 @@ onMounted(() => {
 
         <!-- end card -->
 
-        <div class="p-6 bg-gray-100 min-h-screen">
-            <div class="bg-white shadow rounded-lg p-4">
-                <div class="my-5">
-                    <button class="px-4 py-2 bg-gray-100 border border-gray-300 text-gray-600 rounded-lg mr-2 btn-sm">
-                        Export
+        <div class="p-6 bg-gray-50 min-h-screen">
+        <div class="bg-white shadow-xl rounded-xl p-6">
+            <div class="my-5">
+                <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Export
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+                <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="flex items-center gap-4 w-full">
+                    <select
+                        v-if="years.length > 0"
+                        @change="filterByYear"
+                        v-model="selectedYear"
+                        class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                    >
+                        <option value="">বছর নির্বাচন করুন</option>
+                        <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+                    </select>
+
+                    <select
+    v-if="years.length > 0"
+    @change="filterBySRtype"
+    v-model="selectedSRType"
+    class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+>
+    <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
+    <option value="1">ছাত্র</option>
+    <option value="0">ছাত্রী</option>
+</select>
+
+
+<div class="relative flex-1">
+                <input
+                    type="text"
+                    v-model="Roll"
+                    placeholder="রোল নম্বর লিখুন"
+                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                />
+            </div>
+
+            <div class="relative flex-1">
+                <input
+                    type="text"
+                    v-model="reg_id"
+                    placeholder="রেজিস্ট্রেশন নম্বর লিখুন"
+                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                />
+            </div>
+
+
+
+                    <button
+                        @click="searchStudent"
+                        class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center gap-2 shadow-sm"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <span>অনুসন্ধান</span>
                     </button>
                 </div>
-                <div class="flex justify-between items-center mb-6">
-        <div
-        style=" font-family: 'Merriweather','SolaimanLipi',sans-serif;"
-        class="flex items-center space-x-4 w-full">
-            <!-- Year Selection -->
-            <select
-                v-if="years.length > 0"
-                @change="filterByYear"
-                v-model="selectedYear"
-                class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
-            >
-                <option value="">বছর নির্বাচন করুন</option>
-                <option v-for="year in years" :key="year" :value="year">
-                    {{ year }}
-                </option>
-            </select>
-
-            <!-- Class Selection -->
-            <select
-                v-if="years.length > 0"
-                @change="filterByYear"
-                v-model="selectedYear"
-                class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
-            >
-                <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
-                <option v-for="year in years" :key="year" :value="year">
-                    {{ year }}
-                </option>
-            </select>
-
-            <!-- Roll Input -->
-            <div class="relative flex-1">
-                <input
-                    type="text"
-                    v-model="form.Roll"
-                    placeholder="রোল নম্বর লিখুন"
-                    style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
-                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
-                />
             </div>
 
-            <!-- Registration Input -->
-            <div class="relative flex-1">
-                <input
-                    type="text"
-                    v-model="form.red_id"
-                    placeholder="রেজিস্ট্রেশন নম্বর লিখুন"
-                    style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
-                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
-                />
-            </div>
-
-            <!-- Search Button -->
-            <button
-                @click="searchStudent"
-                class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center space-x-2 shadow-sm"
-            >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <span>অনুসন্ধান</span>
-            </button>
-
-
-
-
-
-
-
-
-        </div>
-    </div>
-
-                <table style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
-                    class="table-auto w-full border-collapse border border-gray-200">
-                    <thead class="bg-gray-100">
+            <div class="overflow-hidden rounded-xl border border-gray-200">
+                <table style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="w-full">
+                    <thead class="bg-gray-50 border-b border-gray-200">
                         <tr>
-                            <th class="border border-gray-200 px-4 py-2 text-left">ক্রমিক নং</th>
-                            <th class="border border-gray-200 px-4 py-2 text-left">
-                                <input type="checkbox" />
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">ক্রমিক নং</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">
+                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                             </th>
-                            <th class="border border-gray-200 px-4 py-2 text-left">নাম</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">পিতার নাম</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">মাদরাসার নাম</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">ক্লাস</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">বছর</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">জন্মতারিখ</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">রোল</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">রেজিস্ট্রেশন</th>
-                            <th class="border border-gray-200 px-4 py-2 text-center">বিস্তারিত</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">নাম</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">পিতার নাম</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">মাদরাসার নাম</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">ক্লাস</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বছর</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">জন্মতারিখ</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">রোল</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">রেজিস্ট্রেশন</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বিস্তারিত</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Adjust the serial number based on the current page -->
-                        <tr v-for="(student, index) in students.data" :key="student.id" class="hover:bg-gray-50">
-                            <!-- Adjust serial number -->
-                            <td class="border border-gray-200 px-4 py-2">{{ (students.current_page - 1) *
-                                students.per_page + (index + 1) }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-md font-semibold text-center">
-                                <input type="checkbox" />
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr v-for="(student, index) in students.data" :key="student.id" class="hover:bg-gray-50 transition-colors duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap">{{ (students.current_page - 1) * students.per_page + (index + 1) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                             </td>
-                            <td class="border border-gray-200 px-4 py-2">{{ student.Name }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.Father }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.Madrasha }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.Class }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.years }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.DateofBirth }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.Roll }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">{{ student.reg_id }}</td>
-                            <td class="border border-gray-200 px-4 py-2 text-center">
-                                <Link
-    :href="route('marhala.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })"
-    class="text-purple-500 hover:underline focus:outline-none inline-flex items-center gap-1"
->
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c-4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-</Link>
-
-
-</td>
-
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Father }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Madrasha }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Class }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.years }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.DateofBirth }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Roll }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ student.reg_id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <Link :href="route('marhala.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })"
+                                      class="text-blue-600 hover:text-blue-800 transition-colors duration-150">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c-4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </Link>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-
-                <nav v-if="students?.links?.length > 1" aria-label="Page navigation example">
-                    <ul class="inline-flex -space-x-px text-sm my-5">
-                        <li v-for="(link, index) in students.links" :key="index">
-                            <a v-if="link.url" :href="link.url"
-                                :class="['flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white', link.active ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white']"
-                                v-html="link.label"></a>
-                            <span v-else
-                                :class="['flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 text-gray-500 bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400', index === 0 ? 'rounded-s-lg' : '', index === students.links.length - 1 ? 'rounded-e-lg' : '']"
-                                v-html="link.label"></span>
-                        </li>
-                    </ul>
-                </nav>
-
             </div>
+
+            <nav v-if="students?.links?.length > 1" class="flex items-center justify-between mt-6">
+                <div class="text-sm text-gray-700">
+                    Showing {{ students.from }} to {{ students.to }} of {{ students.total }} results
+                </div>
+                <ul class="inline-flex items-center -space-x-px rounded-md shadow-sm">
+                    <li v-for="(link, index) in students.links" :key="index">
+                        <a v-if="link.url" :href="link.url"
+                            :class="[
+                                'relative inline-flex items-center px-4 py-2 text-sm font-medium border',
+                                link.active
+                                    ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                                index === 0 ? 'rounded-l-md' : '',
+                                index === students.links.length - 1 ? 'rounded-r-md' : ''
+                            ]"
+                            v-html="link.label">
+                        </a>
+                        <span v-else v-html="link.label" class="relative inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-500"></span>
+                    </li>
+                </ul>
+            </nav>
         </div>
+    </div>
     </AuthenticatedLayout>
 </template>

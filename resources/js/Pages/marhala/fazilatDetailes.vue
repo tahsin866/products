@@ -1,24 +1,19 @@
 <script setup>
-import { usePage } from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { ref, computed } from 'vue';
+import { usePage, useForm } from "@inertiajs/vue3"
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue"
+import { ref, computed } from 'vue'
+import PrimaryButton from "@/Components/PrimaryButton.vue"
+import { router } from '@inertiajs/vue3'
 
-const { props } = usePage();
-const studentDetails = props.studentDetails || {};
-const error = props.error || null;
 
-// Add loading state
-const isLoading = ref(false);
 
-// Handle profile update
-const updateProfile = async () => {
-  isLoading.value = true;
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 1000);
-};
 
-// Subject lists
+
+
+const { props } = usePage()
+const studentDetails = props.studentDetails || {}
+const isLoading = ref(false)
+
 const maleSubjects = [
     { name: 'مشكوة المصابيح (الجزء الأول)' },
     { name: 'تفسير البيضاوي' },
@@ -28,7 +23,7 @@ const maleSubjects = [
     { name: 'الهداية (الجزء الرابع)' },
     { name: 'نزهة النظر في شرح نخبة الفكر' },
     { name: 'تحريك دار العلوم ديوبند' }
-];
+]
 
 const femaleSubjects = [
     { name: 'مشكوة المصابيح (الجزء الأول)' },
@@ -38,12 +33,11 @@ const femaleSubjects = [
     { name: 'الهداية (الجزء الثالث)' },
     { name: 'الهداية (الجزء الرابع)' },
     { name: 'عقيدة الطحاوي' }
-];
+]
 
-// Get subjects based on SRType
 const currentSubjects = computed(() => {
-    return studentDetails.SRType === 0 ? femaleSubjects : maleSubjects;
-});
+    return studentDetails.SRType === 0 ? femaleSubjects : maleSubjects
+})
 
 const studentResults = ref({
     SubValue_1: studentDetails.SubValue_1 || '',
@@ -56,24 +50,46 @@ const studentResults = ref({
     SubValue_8: studentDetails.SubValue_8 || '',
     Total: studentDetails.Total || '',
     Division: studentDetails.Division || ''
-});
-
+})
 
 const getGrade = (marks) => {
-    if (!marks) return 'N/A';
-    const numericMarks = Number(marks);
-    if (numericMarks >= 80) return 'A+';
-    if (numericMarks >= 70) return 'A';
-    if (numericMarks >= 60) return 'A-';
-    if (numericMarks >= 50) return 'B';
-    return 'F';
-};
+    if (!marks) return 'N/A'
+    const numericMarks = Number(marks)
+    if (numericMarks >= 80) return 'মুমতাজ'
+    if (numericMarks >= 70) return 'জায়্যিদ জিদ্দান'
+    if (numericMarks >= 60) return 'জায়্যিদ'
+    if (numericMarks >= 33) return 'মকবুল'
+
+    return 'F'
+}
+
+const updateProfile = () => {
+    isLoading.value = true
+    router.put(route('marhala.update'), studentDetails, {
+        preserveScroll: true,
+        onSuccess: () => {
+            isLoading.value = false
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'তথ্য সফলভাবে সংরক্ষণ করা হয়েছে',
+                life: 3000
+            })
+        }
+    })
+}
 </script>
 
 
 <template>
   <AuthenticatedLayout>
+
+
     <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="min-h-screen bg-gray-50 py-12">
+        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('marhala.fazilat'))">
+    BACK
+</PrimaryButton>
+
   <div class="max-w-full  mx-5">
     <!-- Profile Header Card -->
     <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
@@ -120,198 +136,158 @@ const getGrade = (marks) => {
       <!-- Left Column -->
       <div class="lg:col-span-2 space-y-8">
         <!-- Personal Details Card -->
-        <div class="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-sm p-8 border border-gray-100">
-  <div class="flex items-center justify-between mb-8">
-    <div class="flex items-center space-x-3">
-      <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
-      <h2 class="text-2xl font-bold text-gray-800">ব্যাক্তিগত তথ্য</h2>
+        <div class=" bg-white p-6 rounded-lg">
+    <div class="border-b pb-4 mb-6">
+      <h2 class="text-2xl font-bold text-gray-900">ব্যাক্তিগত তথ্য</h2>
     </div>
-    <button class="p-2 bg-blue-50 rounded-lg text-blue-600 hover:bg-blue-100 transition-all">
-  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2zm0 2v12h12V6H6zm3 4h6v2H9z" />
-  </svg>
-</button>
 
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-blue-50 rounded-lg">
-          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Name Section -->
+      <div class="space-y-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <label class="block text-md font-semibold text-gray-600 mb-1">নাম আরবি</label>
+          <div class="text-lg font-medium text-gray-900">{{ studentDetails.Name }}</div>
         </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">নাম আরবি</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Name }}</p>
+
+
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <label class="block text-md font-semibold text-gray-600 mb-1">নাম ইংরেজি</label>
+          <div class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_name }}</div>
         </div>
       </div>
-    </div>
 
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-green-50 rounded-lg">
-          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
+      <!-- Father's Name Section -->
+      <div class="space-y-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <label class="block text-md font-semibold text-gray-600 mb-1">পিতার নাম আরবি</label>
+          <div class="text-lg font-medium text-gray-900">{{ studentDetails.Father }}</div>
         </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">নাম বাংলা</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Name }}</p>
+
+
+
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <label class="block text-md font-semibold text-gray-600 mb-1">পিতার নাম ইংরেজি</label>
+          <div class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_Fname }}</div>
         </div>
       </div>
-    </div>
 
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-purple-50 rounded-lg">
-          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">নাম ইংরেজি</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.st_en_name }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-red-50 rounded-lg">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">পিতার নাম আরবি</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Father }}</p>
-        </div>
-
-      </div>
-    </div>
+      <!-- Additional Info Section -->
+      <div class="space-y-4 md:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="block text-md font-semibold text-gray-600 mb-1">রোল নম্বর</label>
+            <div class="text-lg font-medium text-gray-900">{{ studentDetails.Roll }}</div>
+          </div>
 
 
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-red-50 rounded-lg">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">পিতার নাম বাংলা</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Father }}</p>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="block text-md font-semibold text-gray-600 mb-1">জন্ম-তারিখ</label>
+            <div class="text-lg font-medium text-gray-900">{{ studentDetails.DateofBirth }}</div>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="block text-md font-semibold text-gray-600 mb-1">জাতিয়তা</label>
+            <div class="text-lg font-medium text-gray-900">{{ studentDetails.Nationality }}</div>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="block text-md font-semibold text-gray-600 mb-1">মোবাইল নম্বর</label>
+            <div class="text-lg font-medium text-gray-900">{{ studentDetails.mobileNumber }}</div>
+          </div>
+           <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="block text-md font-semibold text-gray-600 mb-1">জন্মনিবন্ধন নম্বর</label>
+            <div class="text-lg font-medium text-gray-900">{{ studentDetails.BirthRegistrationNo_nid_no }}</div>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <label class="block text-md font-semibold text-gray-600 mb-1">হিজরি সন</label>
+            <div class="text-lg font-medium text-gray-900">{{ studentDetails.Hijri_years }} হি:</div>
+          </div>
         </div>
 
-      </div>
-    </div>
-
-
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-red-50 rounded-lg">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">পিতার নাম ইংরেজি</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Father }}</p>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <label class="block text-md font-semibold text-gray-600 mb-1">মাদরাসার নাম</label>
+          <div class="text-lg font-medium text-gray-900">{{ studentDetails.Madrasha }}</div>
         </div>
 
-      </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-yellow-50 rounded-lg">
-          <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">রোল নম্বর</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Roll }}</p>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-yellow-50 rounded-lg">
-          <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">জন্ম-তারিখ</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.DateofBirth }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-white p-4 rounded-lg border border-gray-100 hover:shadow-md transition-all">
-      <div class="flex items-start space-x-3">
-        <div class="p-2 bg-indigo-50 rounded-lg">
-          <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-md font-semibold text-gray-500">জাতিয়তা</p>
-          <p class="font-medium text-gray-800 mt-1">{{ studentDetails.Nationality }}</p>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <label class="block text-md font-semibold text-gray-600 mb-1">মাদরাসার নাম ইংরেজি</label>
+          <div class="text-lg font-medium text-gray-900">{{ studentDetails.MadrashaNameEn }}</div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
         <!-- Academic Performance Card -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-6">Academic Performance</h2>
+        <div class="bg-white  shadow-lg p-8">
+  <div class="flex items-center justify-between mb-8">
+    <h2 class="text-2xl font-bold text-gray-800">মার্কশীট</h2>
+    <div class="flex items-center space-x-2">
+      <span class="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium">
+        শিক্ষাবর্ষ {{ studentDetails.years }}
+      </span>
+    </div>
+  </div>
 
-          <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-    <thead>
-      <tr class="bg-gray-50">
-        <th class="px-6 py-4 text-xl font-medium text-gray-500 uppercase tracking-wider text-center">ক্রমিক</th>
-        <th class="px-6 py-4 text-xl font-medium text-gray-500 uppercase tracking-wider text-center">বিষয়</th>
-        <th class="px-6 py-4 text-xl font-medium text-gray-500 uppercase tracking-wider text-center">পূর্ণ নম্বর</th>
-        <th class="px-6 py-4 text-xl font-medium text-gray-500 uppercase tracking-wider text-center">প্রাপ্ত নম্বর</th>
-        <th class="px-6 py-4 text-xl font-medium text-gray-500 uppercase tracking-wider text-center">প্রাপ্ত বিভাগ</th>
-      </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-  <tr v-for="(subject, index) in currentSubjects" :key="index"
-      class="hover:bg-gray-50 transition-colors duration-200">
-    <td class="px-6 py-4 whitespace-nowrap text-center text-xl text-gray-600">{{ index + 1 }}</td>
-    <td class="px-6 py-4 whitespace-nowrap text-center text-xl font-medium text-gray-800">{{ subject.name }}</td>
-    <td class="px-6 py-4 whitespace-nowrap text-center text-xl text-gray-600">১০০</td>
-    <td class="px-6 py-4 whitespace-nowrap text-center text-xl font-medium text-blue-600">
-      {{ studentResults[`SubValue_${index + 1}`] || 'N/A' }}
-    </td>
-    <td class="px-6 py-4 whitespace-nowrap text-center text-xl font-medium text-green-600">
-      {{ getGrade(studentResults[`SubValue_${index + 1}`]) }}
-    </td>
-  </tr>
-</tbody>
+  <div class="overflow-x-auto">
+    <table class="min-w-full">
+      <thead>
+        <tr class="bg-gradient-to-r from-blue-50 to-indigo-50">
+          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center rounded-tl-xl">ক্রমিক</th>
+          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center">বিষয়</th>
+          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center">পূর্ণ নম্বর</th>
+          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center">প্রাপ্ত নম্বর</th>
+          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center rounded-tr-xl">প্রাপ্ত বিভাগ</th>
+        </tr>
+      </thead>
 
-    <tfoot>
-      <tr class="bg-gray-50">
-        <td colspan="3" class="px-6 py-4 text-right text-xl font-bold text-gray-700">মোট</td>
-        <td class="px-6 py-4 text-center text-xl font-bold text-blue-600">{{ studentDetails.Total }}</td>
-        <td class="px-6 py-4 text-center text-xl font-bold text-green-600">{{ studentDetails.Division }}</td>
-      </tr>
-    </tfoot>
+      <tbody>
+        <tr v-for="(subject, index) in currentSubjects"
+            :key="index"
+            class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors duration-200">
+          <td class="px-8 py-6 text-center text-lg text-gray-600">
+            <span class="bg-gray-100 px-3 py-1 rounded-full">{{ index + 1 }}</span>
+          </td>
+          <td class="px-8 py-6 text-center text-lg font-medium text-gray-800">{{ subject.name }}</td>
+          <td class="px-8 py-6 text-center text-lg text-gray-600">
+            <span class="bg-blue-50 px-4 py-1 rounded-lg">১০০</span>
+          </td>
+          <td class="px-8 py-6 text-center text-lg">
+            <span class="font-medium text-blue-600 bg-blue-50 px-4 py-1 rounded-lg">
+              {{ studentResults[`SubValue_${index + 1}`] || 'N/A' }}
+            </span>
+          </td>
+          <td class="px-8 py-6 text-center text-lg">
+            <span :class="{
+              'px-4 py-1 rounded-lg font-medium': true,
+              'bg-green-50 text-green-600': getGrade(studentResults[`SubValue_${index + 1}`]) !== 'F',
+              'bg-red-50 text-red-600': getGrade(studentResults[`SubValue_${index + 1}`]) === 'F'
+            }">
+              {{ getGrade(studentResults[`SubValue_${index + 1}`]) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
 
+      <tfoot>
+        <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
+          <td colspan="3" class="px-8 py-6 text-right text-xl font-bold text-gray-700">মোট</td>
+          <td class="px-8 py-6 text-center">
+            <span class="text-xl font-bold text-blue-600 bg-blue-50 px-6 py-2 rounded-lg">
+              {{ studentDetails.Total }}
+            </span>
+          </td>
+          <td class="px-8 py-6 text-center">
+            <span class="text-xl font-bold text-green-600 bg-green-50 px-6 py-2 rounded-lg">
+              {{ studentDetails.Division }}
+            </span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
 
-          </table>
-          </div>
-        </div>
       </div>
 
       <!-- Right Column -->
@@ -350,7 +326,7 @@ const getGrade = (marks) => {
               </div>
               <div class="ml-4">
                 <p class="text-sm font-medium text-gray-900">ছাত্রে ধরন</p>
-                <p class="text-lg font-semibold text-blue-600">95%</p>
+                <p class="text-lg font-semibold text-blue-600"></p>
               </div>
             </div>
             <div class="flex items-center p-4 bg-gray-50 rounded-lg">
@@ -360,8 +336,8 @@ const getGrade = (marks) => {
                 </svg>
               </div>
               <div class="ml-4">
-                <p class="text-sm font-medium text-gray-900">Attendance</p>
-                <p class="text-lg font-semibold text-blue-600">95%</p>
+                <p class="text-sm font-medium text-gray-900">রিটেক বিষয় সমুহ</p>
+                <p class="text-lg font-semibold text-blue-600"></p>
               </div>
             </div>
             <!-- Add more quick stats -->
@@ -369,46 +345,117 @@ const getGrade = (marks) => {
         </div>
 
         <!-- Update Profile Form -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-6">Update Profile</h2>
-          <form @submit.prevent="updateProfile" class="space-y-4">
-            <div>
-              <label class="block text-md font-semibold  text-gray-700">নাম আরবি</label>
-              <input
-                v-model="studentDetails.Name"
-                type="text"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Full Name</label>
-              <input
-                v-model="studentDetails.Father"
-                type="text"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">Address</label>
-              <textarea
-                v-model="studentDetails.Roll"
-                rows="3"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              ></textarea>
-            </div>
-            <button
-              type="submit"
-              :disabled="isLoading"
-              class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              {{ isLoading ? 'Saving...' : 'Save Changes' }}
-            </button>
-          </form>
-        </div>
+        <div class="bg-gradient-to-br from-gray-50 to-gray-200 rounded-2xl shadow-md p-10 max-w-4xl mx-auto">
+  <h2 class="text-3xl font-extrabold text-gray-800 mb-6 text-center border-b-2 pb-4">তথ্য সংশোধন</h2>
+
+  <form @submit.prevent="updateProfile" class="space-y-8">
+    <!-- Name Section -->
+    <div>
+      <label for="name-arabic" class="block text-lg font-medium text-gray-700 mb-2">নাম আরবি</label>
+      <input
+        id="name-arabic"
+        v-model="studentDetails.Name"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <div>
+      <label for="name-english" class="block text-lg font-medium text-gray-700 mb-2">নাম ইংরেজি</label>
+      <input
+        id="name-english"
+        v-model="studentDetails.st_en_name"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <!-- Father's Name Section -->
+    <div>
+      <label for="father-arabic" class="block text-lg font-medium text-gray-700 mb-2">পিতার নাম আরবি</label>
+      <input
+        id="father-arabic"
+        v-model="studentDetails.Father"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <div>
+      <label for="father-english" class="block text-lg font-medium text-gray-700 mb-2">পিতার নাম ইংরেজি</label>
+      <input
+        id="father-english"
+        v-model="studentDetails.st_en_Fname"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <!-- Contact and ID Section -->
+    <div>
+      <label for="mobile-number" class="block text-lg font-medium text-gray-700 mb-2">মোবাইল নম্বর</label>
+      <input
+        id="mobile-number"
+        v-model="studentDetails.mobileNumber"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <div>
+      <label for="birth-reg" class="block text-lg font-medium text-gray-700 mb-2">জন্মনিবন্ধ নম্বর</label>
+      <input
+        id="birth-reg"
+        v-model="studentDetails.BirthRegistrationNo_nid_no"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <!-- Additional Details -->
+    <div>
+      <label for="madrasha-name-en" class="block text-lg font-medium text-gray-700 mb-2">মাদরাসার নাম ইংরেজি</label>
+      <input
+        id="madrasha-name-en"
+        v-model="studentDetails.MadrashaNameEn"
+        type="text"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <div>
+      <label for="dob" class="block text-lg font-medium text-gray-700 mb-2">জন্ম তারিখ</label>
+      <input
+        id="dob"
+        v-model="studentDetails.DateofBirth"
+        type="date"
+        required
+        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
+      />
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center pt-6">
+      <button
+        type="submit"
+        :disabled="isLoading"
+        class="w-full md:w-auto bg-blue-600 text-white py-3 px-6 rounded-lg font-medium text-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50"
+      >
+        {{ isLoading ? 'সংরক্ষণ করা হচ্ছে...' : 'সংরক্ষণ করুন' }}
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
       </div>
     </div>
   </div>

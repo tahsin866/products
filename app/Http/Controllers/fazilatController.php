@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\student;
+
 use App\Models\students_number_potrro;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use function Termwind\render;
 use Inertia\Inertia;
-use Rakibhstu\Banglanumber\NumberToBangla;
-
-
-
-
-
 
 
 
 
 class fazilatController extends Controller
 {
-
 
 
 
@@ -74,6 +64,8 @@ class fazilatController extends Controller
         $students = $query->paginate(15)->withQueryString();
         $years = students_number_potrro::select('years')->distinct()->pluck('years');
 
+
+
         return Inertia::render('marhala/fazilat', [
             'students' => $students,
             'years' => $years,
@@ -83,15 +75,16 @@ class fazilatController extends Controller
             'studentCount' => $totalCount,
             'yearCount' => $yearCount,
             'maleCount' => $maleCount,
-            'femaleCount' => $femaleCount
+            'femaleCount' => $femaleCount,
+
         ]);
-    // 'students' => $query->paginate(10), // Example: Paginate the students
+
 
 
     }
 
 
-
+// বিস্তারিত
 
 
     public function details($Roll, $reg_id) {
@@ -114,7 +107,34 @@ class fazilatController extends Controller
 
 
 
+    // সংশোধনী
 
+    public function update(Request $request)
+    {
+        students_number_potrro::where('Roll', $request->Roll)
+            ->where('reg_id', $request->reg_id)
+            ->update($request->all());
+
+        return back()->with('success', 'Student information updated successfully');
+    }
+
+
+
+
+
+//    search
+
+
+public function search(Request $request)
+{
+    $student = students_number_potrro::where('Roll', $request->Roll)
+        ->where('reg_id', $request->reg_id)
+        ->first();
+
+    return Inertia::render('marhala.search', [
+        'student' => $student
+    ]);
+}
 
 
 }

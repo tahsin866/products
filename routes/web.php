@@ -46,6 +46,11 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/marhala/fazilat', [fazilatController::class, 'demo'])->name('marhala.fazilat');
 Route::get('/marhala/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('marhala.fazilatDetailes');
+Route::put('/marhala/update', [fazilatController::class, 'update'])->name('marhala.update');
+// Route::get('/marhala/filterBySRType', [fazilatController::class, 'filterBySRType'])->name('marhala.filterBySRType');
+Route::get('/marhala/search', [fazilatController::class, 'search'])->name('students.search');
+
+
 
 
 
