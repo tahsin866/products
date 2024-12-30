@@ -78,6 +78,18 @@ const updateProfile = () => {
         }
     })
 }
+
+
+// pdf
+
+
+const downloadCertificate = () => {
+    window.location.href = route('marhala.certificate.pdf', {
+        Roll: studentDetails.Roll,
+        reg_id: studentDetails.reg_id
+    });
+};
+
 </script>
 
 
@@ -93,7 +105,7 @@ const updateProfile = () => {
   <div class="max-w-full  mx-5">
     <!-- Profile Header Card -->
     <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-      <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-8">
+      <div class="bg-gradient-to-r from-slate-800 to-zinc-900 p-8">
         <div class="flex flex-col md:flex-row items-center">
           <div class="relative">
             <img
@@ -131,164 +143,235 @@ const updateProfile = () => {
       </div>
     </div>
 
-    <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Left Column -->
-      <div class="lg:col-span-2 space-y-8">
-        <!-- Personal Details Card -->
-        <div class=" bg-white p-6 rounded-lg">
-    <div class="border-b pb-4 mb-6">
-      <h2 class="text-2xl font-bold text-gray-900">ব্যাক্তিগত তথ্য</h2>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Name Section -->
-      <div class="space-y-4">
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <label class="block text-md font-semibold text-gray-600 mb-1">নাম আরবি</label>
-          <div class="text-lg font-medium text-gray-900">{{ studentDetails.Name }}</div>
-        </div>
-
-
-
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <label class="block text-md font-semibold text-gray-600 mb-1">নাম ইংরেজি</label>
-          <div class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_name }}</div>
-        </div>
-      </div>
-
-      <!-- Father's Name Section -->
-      <div class="space-y-4">
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <label class="block text-md font-semibold text-gray-600 mb-1">পিতার নাম আরবি</label>
-          <div class="text-lg font-medium text-gray-900">{{ studentDetails.Father }}</div>
-        </div>
-
-
-
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <label class="block text-md font-semibold text-gray-600 mb-1">পিতার নাম ইংরেজি</label>
-          <div class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_Fname }}</div>
-        </div>
-      </div>
-
-      <!-- Additional Info Section -->
-      <div class="space-y-4 md:col-span-2">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <label class="block text-md font-semibold text-gray-600 mb-1">রোল নম্বর</label>
-            <div class="text-lg font-medium text-gray-900">{{ studentDetails.Roll }}</div>
-          </div>
-
-
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <label class="block text-md font-semibold text-gray-600 mb-1">জন্ম-তারিখ</label>
-            <div class="text-lg font-medium text-gray-900">{{ studentDetails.DateofBirth }}</div>
-          </div>
-
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <label class="block text-md font-semibold text-gray-600 mb-1">জাতিয়তা</label>
-            <div class="text-lg font-medium text-gray-900">{{ studentDetails.Nationality }}</div>
-          </div>
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <label class="block text-md font-semibold text-gray-600 mb-1">মোবাইল নম্বর</label>
-            <div class="text-lg font-medium text-gray-900">{{ studentDetails.mobileNumber }}</div>
-          </div>
-           <div class="bg-gray-50 p-4 rounded-lg">
-            <label class="block text-md font-semibold text-gray-600 mb-1">জন্মনিবন্ধন নম্বর</label>
-            <div class="text-lg font-medium text-gray-900">{{ studentDetails.BirthRegistrationNo_nid_no }}</div>
-          </div>
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <label class="block text-md font-semibold text-gray-600 mb-1">হিজরি সন</label>
-            <div class="text-lg font-medium text-gray-900">{{ studentDetails.Hijri_years }} হি:</div>
-          </div>
-        </div>
-
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <label class="block text-md font-semibold text-gray-600 mb-1">মাদরাসার নাম</label>
-          <div class="text-lg font-medium text-gray-900">{{ studentDetails.Madrasha }}</div>
-        </div>
-
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <label class="block text-md font-semibold text-gray-600 mb-1">মাদরাসার নাম ইংরেজি</label>
-          <div class="text-lg font-medium text-gray-900">{{ studentDetails.MadrashaNameEn }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-        <!-- Academic Performance Card -->
-        <div class="bg-white  shadow-lg p-8">
-  <div class="flex items-center justify-between mb-8">
-    <h2 class="text-2xl font-bold text-gray-800">মার্কশীট</h2>
-    <div class="flex items-center space-x-2">
-      <span class="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium">
-        শিক্ষাবর্ষ {{ studentDetails.years }}
-      </span>
-    </div>
-  </div>
-
-  <div class="overflow-x-auto">
-    <table class="min-w-full">
-      <thead>
-        <tr class="bg-gradient-to-r from-blue-50 to-indigo-50">
-          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center rounded-tl-xl">ক্রমিক</th>
-          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center">বিষয়</th>
-          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center">পূর্ণ নম্বর</th>
-          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center">প্রাপ্ত নম্বর</th>
-          <th class="px-8 py-5 text-lg font-semibold text-gray-600 text-center rounded-tr-xl">প্রাপ্ত বিভাগ</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr v-for="(subject, index) in currentSubjects"
-            :key="index"
-            class="border-b border-gray-100 hover:bg-gray-50/50 transition-colors duration-200">
-          <td class="px-8 py-6 text-center text-lg text-gray-600">
-            <span class="bg-gray-100 px-3 py-1 rounded-full">{{ index + 1 }}</span>
-          </td>
-          <td class="px-8 py-6 text-center text-lg font-medium text-gray-800">{{ subject.name }}</td>
-          <td class="px-8 py-6 text-center text-lg text-gray-600">
-            <span class="bg-blue-50 px-4 py-1 rounded-lg">১০০</span>
-          </td>
-          <td class="px-8 py-6 text-center text-lg">
-            <span class="font-medium text-blue-600 bg-blue-50 px-4 py-1 rounded-lg">
-              {{ studentResults[`SubValue_${index + 1}`] || 'N/A' }}
-            </span>
-          </td>
-          <td class="px-8 py-6 text-center text-lg">
-            <span :class="{
-              'px-4 py-1 rounded-lg font-medium': true,
-              'bg-green-50 text-green-600': getGrade(studentResults[`SubValue_${index + 1}`]) !== 'F',
-              'bg-red-50 text-red-600': getGrade(studentResults[`SubValue_${index + 1}`]) === 'F'
-            }">
-              {{ getGrade(studentResults[`SubValue_${index + 1}`]) }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-
-      <tfoot>
-        <tr class="bg-gradient-to-r from-gray-50 to-gray-100">
-          <td colspan="3" class="px-8 py-6 text-right text-xl font-bold text-gray-700">মোট</td>
-          <td class="px-8 py-6 text-center">
-            <span class="text-xl font-bold text-blue-600 bg-blue-50 px-6 py-2 rounded-lg">
-              {{ studentDetails.Total }}
-            </span>
-          </td>
-          <td class="px-8 py-6 text-center">
-            <span class="text-xl font-bold text-green-600 bg-green-50 px-6 py-2 rounded-lg">
-              {{ studentDetails.Division }}
-            </span>
-          </td>
-        </tr>
-      </tfoot>
-    </table>
-  </div>
+    <div class="mt-6 mb-5">
+    <PrimaryButton
+        @click="downloadCertificate"
+        class="flex items-center gap-2"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+        >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+        </svg>
+        Print Certificate
+    </PrimaryButton>
 </div>
 
-      </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+
+      <!-- Left Column -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Personal Details Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <!-- Keeping the header -->
+    <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4 ">
+        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            ব্যাক্তিগত তথ্য
+        </h2>
+    </div>
+
+    <div class="p-6">
+        <table class="min-w-full divide-y divide-gray-200">
+            <tbody class="divide-y divide-gray-200">
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap w-1/3">
+                        <span class="text-md font-semibold text-gray-600">নাম আরবি</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Name }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">নাম ইংরেজি</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_name }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">পিতার নাম আরবি</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Father }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">পিতার নাম ইংরেজি</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_Fname }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">রোল নম্বর</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Roll }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">জন্ম-তারিখ</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.DateofBirth }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">জাতিয়তা</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Nationality }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">মোবাইল নম্বর</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.mobileNumber }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">জন্মনিবন্ধন নম্বর</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.BirthRegistrationNo_nid_no }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">হিজরি সন</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Hijri_years }} হি:</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">মাদরাসার নাম</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Madrasha }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">মাদরাসার নাম ইংরেজি</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.MadrashaNameEn }}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-6 mb-5">
+    <PrimaryButton
+        @click="downloadCertificate"
+        class="flex items-center gap-2"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+        >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+        </svg>
+        Print Certificate
+    </PrimaryButton>
+</div>
+
+
+            <!-- Academic Performance Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <!-- Header -->
+    <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4">
+        <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-white">মার্কশীট</h2>
+            <span class="bg-white/20 text-white px-4 py-2 rounded-lg">
+                শিক্ষাবর্ষ {{ studentDetails.years }}
+            </span>
+        </div>
+    </div>
+
+    <div class="p-6">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+                <tr class="bg-gray-50">
+                    <th class="px-6 py-4 text-md font-semibold text-gray-600">ক্রমিক</th>
+                    <th class="px-6 py-4 text-md font-semibold text-gray-600">বিষয়</th>
+                    <th class="px-6 py-4 text-md font-semibold text-gray-600">পূর্ণ নম্বর</th>
+                    <th class="px-6 py-4 text-md font-semibold text-gray-600">প্রাপ্ত নম্বর</th>
+                    <th class="px-6 py-4 text-md font-semibold text-gray-600">প্রাপ্ত বিভাগ</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                <tr v-for="(subject, index) in currentSubjects" :key="index">
+                    <td class="px-6 py-4 text-center">
+                        <span class="bg-gray-100 px-3 py-1 rounded-full">{{ index + 1 }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-center font-medium">{{ subject.name }}</td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="bg-blue-50 px-4 py-1 rounded-lg">১০০</span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="bg-blue-50 text-blue-600 px-4 py-1 rounded-lg">
+                            {{ studentResults[`SubValue_${index + 1}`] || 'N/A' }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <span :class="{
+                            'px-4 py-1 rounded-lg': true,
+                            'bg-green-50 text-green-600': getGrade(studentResults[`SubValue_${index + 1}`]) !== 'F',
+                            'bg-red-50 text-red-600': getGrade(studentResults[`SubValue_${index + 1}`]) === 'F'
+                        }">
+                            {{ getGrade(studentResults[`SubValue_${index + 1}`]) }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bg-gray-50 font-bold">
+                    <td colspan="3" class="px-6 py-4 text-right">মোট</td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="bg-blue-50 text-blue-600 px-6 py-2 rounded-lg">
+                            {{ studentDetails.Total }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="bg-green-50 text-green-600 px-6 py-2 rounded-lg">
+                            {{ studentDetails.Division }}
+                        </span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+        </div>
 
       <!-- Right Column -->
       <div class="space-y-8">

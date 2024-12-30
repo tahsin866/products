@@ -50,6 +50,16 @@ Route::put('/marhala/update', [fazilatController::class, 'update'])->name('marha
 // Route::get('/marhala/filterBySRType', [fazilatController::class, 'filterBySRType'])->name('marhala.filterBySRType');
 Route::get('/marhala/search', [fazilatController::class, 'search'])->name('students.search');
 
+Route::get('/marhala/cirtificateProvide', [FazilatController::class, 'cirtificateProvide'])->name('marhala.cirtificateProvide');
+// Route::post('/marhala/cirtificateSearch', [FazilatController::class, 'cirtificateSearch'])->name('marhala.cirtificateSearch');
+Route::get('/marhala/search', [fazilatController::class, 'search'])->name('marhala.search');
+Route::get('/marhala/searchBn', [fazilatController::class, 'searchBn'])->name('marhala.searchBn');
+
+Route::get('/marhala/certificate/{Roll}/{reg_id}', [fazilatController::class, 'generatePdf'])->name('marhala.certificate.pdf');
+
+
+
+
 
 
 

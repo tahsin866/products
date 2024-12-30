@@ -354,15 +354,15 @@ onMounted(() => {
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Father }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Madrasha }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Class }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.years }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.DateofBirth }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.Roll }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ student.reg_id }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-6 py-4 text-md font-semibold  whitespace-nowrap">{{ student.Name }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Father }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Madrasha }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Class }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.years }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.DateofBirth }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Roll }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.reg_id }}</td>
+                            <td class="px-6 py-4  whitespace-nowrap">
                                 <Link :href="route('marhala.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })"
                                       class="text-blue-600 hover:text-blue-800 transition-colors duration-150">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">

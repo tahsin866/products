@@ -8,4 +8,20 @@ class student extends Model
 {
 
 
+
+    protected $fillable = [
+        'Name',
+
+
+        'Father',
+
+        'DateofBirth'
+    ];
+
+
+
+
+
+
+
 }

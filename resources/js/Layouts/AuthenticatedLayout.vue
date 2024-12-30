@@ -9,7 +9,7 @@ import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 const sidebarOpen = ref(false);
-const dropdownOpen = ref({ products: false, orders: false });
+const dropdownOpen = ref({ products: false, orders: false, sanawia: false });
 </script>
 
 <template>
@@ -18,11 +18,15 @@ const dropdownOpen = ref({ products: false, orders: false });
 
 
 
-    <div class="flex min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div
+
+    style=" font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+
+    class="flex min-h-screen bg-gray-100 dark:bg-gray-900">
         <!-- Sidebar -->
         <aside :class="{'hidden sm:block': !sidebarOpen}" class="bg-gray-800 text-white w-64 flex-shrink-0 fixed h-screen">
             <div class="h-16 flex items-center justify-center bg-gray-900 text-lg font-semibold">
-                Product Management
+             সনদ শাখা
             </div>
             <nav style=" font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="mt-4 space-y-2 overflow-y-auto">
                 <Link :href="route ('dashboard')" class="block px-4 py-2 hover:bg-gray-700">ড্যাশবোর্ড</Link>
@@ -51,7 +55,7 @@ const dropdownOpen = ref({ products: false, orders: false });
 
                         <Link href="route('#')" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
 
-                        <Link href="route('#')" class="block px-4 py-2 hover:bg-gray-700">সনদ কার্যক্রম</Link>
+                        <Link :href="route('marhala.cirtificateProvide')" class="block px-4 py-2 hover:bg-gray-700">সনদ কার্যক্রম</Link>
                         <Link href="route('#')" class="block px-4 py-2 hover:bg-gray-700">সনদ চেক</Link>
                     </div>
                 </div>
@@ -76,8 +80,37 @@ const dropdownOpen = ref({ products: false, orders: false });
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.orders" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">আবেদনের তালিকা</Link>
-                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">আবেদন </Link>
+                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
+                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
+                    </div>
+                </div>
+<!--
+                সানাবিয়া -->
+                <div>
+                    <button
+                        @click="dropdownOpen.sanawia = !dropdownOpen.sanawia"
+                        class="w-full flex justify-between items-center px-4 py-2 hover:bg-gray-700"
+                    >
+                  সানাবিয়া
+                        <svg
+                            class="w-4 h-4 transition-transform"
+                            :class="{'rotate-180': dropdownOpen.sanawia}"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                    <div v-if="dropdownOpen.sanawia" class="pl-6">
+                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
+                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
                 </div>
                 <Link href="#" class="block px-4 py-2 hover:bg-gray-700">নোটিস</Link>

@@ -1,90 +1,258 @@
-    <template>
-        <div class="container-fluid">
-        <div class="border-b border-gray-200 dark:border-gray-700">
-            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-            <li
-                class="me-2"
-                v-for="tab in tabs"
-                :key="tab.name"
-            >
-                <a
-                href="#"
-                class="inline-flex items-center justify-center p-4 border-b-2 rounded-t-lg"
-                :class="{
-                    'text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500': activeTab === tab.name,
-                    'border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300': activeTab !== tab.name
-                }"
-                @click.prevent="setActiveTab(tab.name)"
-                >
-                <svg
-                    class="w-4 h-4 me-2"
-                    :class="activeTab === tab.name ? tab.activeIconClass : tab.inactiveIconClass"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    :viewBox="tab.iconViewBox"
-                >
-                    <path :d="tab.iconPath" />
-                </svg>
-                {{ tab.label }}
-                </a>
-            </li>
-            </ul>
-        </div>
-        <div class="p-4">
-            <component :is="activeTabComponent" />
-        </div>
-        </div>
-    </template>
+<script setup>
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, router } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 
-    <script setup>
-    import { ref, computed } from 'vue';
 
-    // Define the tabs and their properties
-    const tabs = [
-        {
 
-        name: 'ড্যাশবোর্ড',
-        label: 'ড্যাশবোর্ড',
-        component: () => import('./fazilat.vue'),
-        iconPath:
-            'M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z',
-        iconViewBox: '0 0 18 18',
-        activeIconClass: 'text-blue-600 dark:text-blue-500',
-        inactiveIconClass: 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300',
+
+const props = defineProps({
+    years: Array,
+    studentData: {
+        type: Array,
+        default: () => []
+    }
+});
+
+
+const form = ref({
+    year: '',
+    Roll: '',
+    reg_id: ''
+});
+
+const isLoading = ref(false);
+
+const validateAndSearch = () => {
+    if (!form.value.year || !form.value.Roll || !form.value.reg_id) {
+        const missingField = !form.value.year ? 'বছর' :
+                            !form.value.Roll ? 'রোল নম্বর' :
+                            'রেজিস্ট্রেশন আইডি';
+        alert(`অনুগ্রহ করে ${missingField} প্রদান করুন।`);
+        return;
+    }
+    searchStudents();
+};
+
+const searchStudents = () => {
+    if (isLoading.value) return;
+
+    isLoading.value = true;
+
+    router.get(route('marhala.search'), form.value, {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            isLoading.value = false;
         },
-        {
-        name: 'সনদ প্রদান',
-        label: 'সনদ প্রদান',
-        //   component: () => import('./dashboard.vue'),
-        iconPath:
-            'M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z',
-        iconViewBox: '0 0 20 20',
-        activeIconClass: 'text-blue-600 dark:text-blue-500',
-        inactiveIconClass: 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300',
-        },
-        {
-        name: 'settings',
-        label: 'Settings',
-        //   component: () => import('./SettingsTab.vue'),
-        iconPath:
-            'M5 11.424V1a1 1 0 1 0-2 0v10.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.228 3.228 0 0 0 0-6.152ZM19.25 14.5A3.243 3.243 0 0 0 17 11.424V1a1 1 0 0 0-2 0v10.424a3.227 3.227 0 0 0 0 6.152V19a1 1 0 1 0 2 0v-1.424a3.243 3.243 0 0 0 2.25-3.076Zm-6-9A3.243 3.243 0 0 0 11 2.424V1a1 1 0 0 0-2 0v1.424a3.228 3.228 0 0 0 0 6.152V19a1 1 0 1 0 2 0V8.576A3.243 3.243 0 0 0 13.25 5.5Z',
-        iconViewBox: '0 0 20 20',
-        activeIconClass: 'text-blue-600 dark:text-blue-500',
-        inactiveIconClass: 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300',
-        },
-    ];
+        onError: () => {
+            alert('অনুসন্ধান ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+            isLoading.value = false;
+        }
+    });
+};
 
-    // State for active tab
-    const activeTab = ref(tabs[0].name);
 
-    // Computed property for the active tab's component
-    const activeTabComponent = computed(() =>
-        tabs.find((tab) => tab.name === activeTab.value)?.component || null
-    );
+// Add new ref for active tab
+const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' for মারহালাওয়ারী সনদ
 
-    // Method to set the active tab
-    const setActiveTab = (tabName) => {
-        activeTab.value = tabName;
-    };
-    </script>
+
+</script>
+
+<template>
+    <Head>
+        <meta type="hidden" name="csrf-token" :content="$page.props.csrf_token">
+    </Head>
+
+    <AuthenticatedLayout>
+        <div class="mx-auto p-6">
+            <!-- Tab Navigation -->
+            <div class="mb-8">
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button
+                            @click="activeTab = 'single'"
+                            :class="[
+                                activeTab === 'single'
+                                    ? 'border-indigo-500 text-indigo-600'
+                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-md transition-colors duration-200'
+                            ]"
+                        >
+                            একক সনদ
+                        </button>
+                        <button
+                            @click="activeTab = 'marhala'"
+                            :class="[
+                                activeTab === 'marhala'
+                                    ? 'border-indigo-500 text-indigo-600'
+                                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
+                                'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-md transition-colors duration-200'
+                            ]"
+                        >
+                            মারহালাওয়ারী সনদ
+                        </button>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div v-if="activeTab === 'single'">
+                <!-- Your existing search section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">একক সনদপত্র অনুসন্ধান</h2>
+                    <!-- Your existing form -->
+                    <form @submit.prevent="validateAndSearch" class="bg-white rounded-xl shadow-lg p-8">
+                        <!-- ... your existing form content ... -->
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <!-- Year Select -->
+                        <div class="space-y-2">
+                            <label class="block text-md font-semibold text-gray-700">
+                                বছর নির্বাচন করুন
+                            </label>
+                            <select
+                                v-model="form.year"
+                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-600"
+                            >
+                                <option value="">বছর নির্বাচন করুন</option>
+                                <option v-for="year in years" :key="year.years" :value="year.years">
+                                    {{ year.years }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Roll Input -->
+                        <div class="space-y-2">
+                            <label class="block text-md font-semibold text-gray-700">
+                                রোল নম্বর
+                            </label>
+                            <input
+                                v-model="form.Roll"
+                                type="text"
+                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                placeholder="রোল নম্বর লিখুন"
+                            >
+                        </div>
+
+                        <!-- Registration ID Input -->
+                        <div class="space-y-2">
+                            <label class="block text-md font-semibold text-gray-700">
+                                রেজিস্ট্রেশন আইডি
+                            </label>
+                            <input
+                                v-model="form.reg_id"
+                                type="text"
+                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                placeholder="রেজিস্ট্রেশন আইডি লিখুন"
+                            >
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex items-end">
+                            <button
+                                type="submit"
+                                :disabled="isLoading"
+                                class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 disabled:opacity-50 font-semibold shadow-md hover:shadow-lg"
+                            >
+                                <span v-if="isLoading" class="flex items-center justify-center">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    অনুসন্ধান করা হচ্ছে...
+                                </span>
+                                <span v-else>অনুসন্ধান করুন</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    </form>
+                </div>
+
+                <!-- Your existing results table -->
+                <div v-if="studentData && studentData.length > 0" class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <!-- ... your existing table content ... -->
+
+                    <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-xl font-bold text-gray-800">অনুসন্ধানের ফলাফল</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">নাম</th>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">পিতার নাম</th>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">রোল নম্বর</th>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">রেজিস্ট্রেশন নম্বর</th>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">জন্ম-তারিখ</th>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">ক্লাস</th>
+                                <th class="px-6 py-4 text-left text-md font-semibold text-gray-600">একশন</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr v-for="student in studentData" :key="student.id" class="hover:bg-gray-50 transition-colors duration-150">
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ student.Name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ student.Father }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ student.Roll }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ student.reg_id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ student.DateofBirth }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{ student.Class }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <Link
+    :href="route('marhala.fazilatDetailes', {
+        Roll: student.Roll,
+        reg_id: student.reg_id
+    })"
+    class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all duration-200 font-medium"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5"
+    >
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.694 19.02a4.5 4.5 0 01-1.697 1.098l-4.032 1.342a.375.375 0 01-.478-.478l1.342-4.032a4.5 4.5 0 011.098-1.697L16.862 3.487z"
+        />
+        <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 7.5L16.5 4.5"
+        />
+    </svg>
+</Link>
+
+
+</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                </div>
+
+                <!-- Your existing no results message -->
+                <div v-else-if="form.wasSuccessful" class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 text-center">
+
+                    <p class="text-yellow-700 text-lg font-medium">প্রদত্ত তথ্যের সাথে কোন সনদপত্র খুঁজে পাওয়া যায়নি।</p>
+                </div>
+            </div>
+
+            <div v-else-if="activeTab === 'marhala'" class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">মারহালাওয়ারী সনদপত্র অনুসন্ধান</h2>
+                <!-- Add your marhala-specific content here -->
+                <div class="text-center text-gray-600">
+                    মারহালাওয়ারী সনদপত্রের জন্য ফর্ম এখানে যুক্ত করুন
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
