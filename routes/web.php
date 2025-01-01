@@ -58,7 +58,9 @@ Route::get('/marhala/searchBn', [fazilatController::class, 'searchBn'])->name('m
 Route::get('/marhala/certificate/{Roll}/{reg_id}', [fazilatController::class, 'generatePdf'])->name('marhala.certificate.pdf');
 
 
-
+Route::get('/applicationForm', function () {
+    return inertia::render('applicationForm');
+});
 
 
 

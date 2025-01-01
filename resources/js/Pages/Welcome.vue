@@ -149,7 +149,7 @@ function handleImageError() {
                             </div>
 
                             <div class="pt-3">
-                                <h2 class="text-xl font-semibold text-black">Template Library</h2>
+                                <h2 class="text-xl font-semibold text-black">মারহালাওয়ারী ফলাফল অনুসন্ধান</h2>
                                 <p class="mt-4 text-sm/relaxed">
                                     Browse and customize our collection of professional certificate templates.
                                 </p>
