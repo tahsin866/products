@@ -7,65 +7,47 @@ use App\Models\students_number_potrro;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
-
+use Illuminate\Support\Facades\Cache;
 
 class fazilatController extends Controller
 {
-
-
-
-
     public function demo(Request $request)
     {
-        // Base query
+        // Cache distinct years for optimization
+        $years = Cache::remember('distinct_years', 60, function () {
+            return students_number_potrro::select('years')->distinct()->pluck('years');
+        });
+
         $query = students_number_potrro::where('CID', 2);
 
-        // Total count (all years)
-        $totalCount = students_number_potrro::where('CID', 2)->count();
+        $totalCount = Cache::remember('total_count', 60, function () {
+            return students_number_potrro::where('CID', 2)->count();
+        });
 
-        // Initialize counts
         $yearCount = 0;
         $maleCount = 0;
         $femaleCount = 0;
 
-        // Get counts based on year selection
         if ($request->year) {
-            // Get total count for selected year
-            $yearCount = students_number_potrro::where('CID', 2)
-                ->where('years', $request->year)
-                ->count();
-
-            // Get male count (SRType = 1)
-            $maleCount = students_number_potrro::where('CID', 2)
-                ->where('SRType', 1)
-                ->where('years', $request->year)
-                ->count();
-
-            // Get female count (SRType = 0)
-            $femaleCount = students_number_potrro::where('CID', 2)
-                ->where('SRType', 0)
-                ->where('years', $request->year)
-                ->count();
-
             $query->where('years', $request->year);
+
+            // Aggregate counts in a single query
+            $counts = students_number_potrro::where('CID', 2)
+                ->where('years', $request->year)
+                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN SRType = 1 THEN 1 ELSE 0 END) as male, SUM(CASE WHEN SRType = 0 THEN 1 ELSE 0 END) as female')
+                ->first();
+
+            $yearCount = $counts->total;
+            $maleCount = $counts->male;
+            $femaleCount = $counts->female;
         }
 
-
-
-
-        // Search functionality
         if ($request->filled('Roll') && $request->filled('reg_id')) {
             $query->where('Roll', 'like', '%' . $request->Roll . '%')
                   ->where('reg_id', 'like', '%' . $request->reg_id . '%');
         }
 
-        // Get paginated results
         $students = $query->paginate(15)->withQueryString();
-        $years = students_number_potrro::select('years')->distinct()->pluck('years');
-
-
 
         return Inertia::render('marhala/fazilat', [
             'students' => $students,
@@ -77,182 +59,121 @@ class fazilatController extends Controller
             'yearCount' => $yearCount,
             'maleCount' => $maleCount,
             'femaleCount' => $femaleCount,
-
         ]);
-
-
-
     }
 
-
-// বিস্তারিত
-
-
-    public function details($Roll, $reg_id) {
+    public function details($Roll, $reg_id)
+    {
         $details = students_number_potrro::where('CID', 2)
             ->where('Roll', $Roll)
             ->where('reg_id', $reg_id)
-            ->first();
-
-        if (!$details) {
-            return inertia::render('marhala/fazilatDetailes', [
-                'error' => 'Student not found.',
-            ]);
-        }
+            ->firstOrFail();
 
         return inertia::render('marhala/fazilatDetailes', [
             'studentDetails' => $details,
         ]);
     }
 
-
-
-
-    // সংশোধনী
-
     public function update(Request $request)
     {
+        $request->validate([
+            'Roll' => 'required',
+            'reg_id' => 'required',
+        ]);
+
         students_number_potrro::where('Roll', $request->Roll)
             ->where('reg_id', $request->reg_id)
-            ->update($request->all());
+            ->update($request->except(['_token']));
 
         return back()->with('success', 'Student information updated successfully');
     }
 
+    public function cirtificateProvide()
+    {
+        $arabicYears = Cache::remember('arabic_years', 60, function () {
+            return students_number_potrro::select('years')->distinct()->get();
+        });
 
+        $bengaliYears = Cache::remember('bengali_years', 60, function () {
+            return student::select('years')->distinct()->get();
+        });
 
-
-
-//    search
-
-
-// public function search(Request $request)
-// {
-//     $student = students_number_potrro::where('Roll', $request->Roll)
-//         ->where('reg_id', $request->reg_id)
-//         ->first();
-
-//     return Inertia::render('marhala.search', [
-//         'student' => $student
-//     ]);
-// }
-
-
-
-
-
-// cirtificateProvide
-
-public function cirtificateProvide()
-{
-    $arabicYears = students_number_potrro::select('years')->distinct()->get();
-    $bengaliYears = student::select('years')->distinct()->get();
-
-    return Inertia::render('marhala/cirtificateProvide', [
-        'arabicYears' => $arabicYears,
-        'bengaliYears' => $bengaliYears,
-        'arabicStudentData' => [],
-        'bengaliStudentData' => []
-    ]);
-}
-
-
-
-
-public function search(Request $request)
-{
-    $arabicYears = students_number_potrro::select('years')->distinct()->get();
-
-    if (!$request->filled(['year', 'Roll', 'reg_id'])) {
         return Inertia::render('marhala/cirtificateProvide', [
             'arabicYears' => $arabicYears,
-            'arabicStudentData' => []
-        ]);
-    }
-
-    $arabicStudentData = students_number_potrro::where([
-        ['years', $request->year],
-        ['Roll', $request->Roll],
-        ['reg_id', $request->reg_id],
-        ['CID', 2]
-    ])->get();
-
-    return Inertia::render('marhala/cirtificateProvide', [
-        'arabicYears' => $arabicYears,
-        'arabicStudentData' => $arabicStudentData
-    ]);
-}
-
-public function searchBn(Request $request)
-{
-    $bengaliYears = student::select('years')->distinct()->get();
-
-    if (!$request->filled(['year', 'Roll', 'reg_id'])) {
-        return Inertia::render('marhala/cirtificateProvide', [
             'bengaliYears' => $bengaliYears,
+            'arabicStudentData' => [],
             'bengaliStudentData' => []
         ]);
     }
 
-    $bengaliStudentData = student::where([
-        ['years', $request->year],
-        ['Roll', $request->Roll],
-        ['reg_id', $request->reg_id],
-        ['CID', 2]
-    ])->get();
+    public function search(Request $request)
+    {
+        $arabicYears = Cache::remember('arabic_years', 60, function () {
+            return students_number_potrro::select('years')->distinct()->get();
+        });
 
-    return Inertia::render('marhala/cirtificateProvide', [
-        'bengaliYears' => $bengaliYears,
-        'bengaliStudentData' => $bengaliStudentData
-    ]);
-}
+        if (!$request->filled(['year', 'Roll', 'reg_id'])) {
+            return Inertia::render('marhala/cirtificateProvide', [
+                'arabicYears' => $arabicYears,
+                'arabicStudentData' => []
+            ]);
+        }
 
+        $arabicStudentData = students_number_potrro::where([
+            ['years', $request->year],
+            ['Roll', $request->Roll],
+            ['reg_id', $request->reg_id],
+            ['CID', 2]
+        ])->get();
 
-
-
-
-
-
-
-
-
-
-
-// generatePdf
-
-
-public function generatePdf($Roll, $reg_id)
-{
-    $details = students_number_potrro::where('CID', 2)
-        ->where('Roll', $Roll)
-        ->where('reg_id', $reg_id)
-        ->first();
-
-    if (!$details) {
-        return response()->json(['message' => 'Student not found'], 404);
+        return Inertia::render('marhala/cirtificateProvide', [
+            'arabicYears' => $arabicYears,
+            'arabicStudentData' => $arabicStudentData
+        ]);
     }
 
-    $pdf = PDF::loadView('pdfs.student-certificate', [
-        'studentDetails' => $details,
-    ]);
+    public function searchBn(Request $request)
+    {
+        $bengaliYears = Cache::remember('bengali_years', 60, function () {
+            return student::select('years')->distinct()->get();
+        });
 
-    $pdf->setPaper('A4');
-    $pdf->set_option('isHtml5ParserEnabled', true);
-    $pdf->set_option('isPhpEnabled', true);
+        if (!$request->filled(['year', 'Roll', 'reg_id'])) {
+            return Inertia::render('marhala/cirtificateProvide', [
+                'bengaliYears' => $bengaliYears,
+                'bengaliStudentData' => []
+            ]);
+        }
 
-    $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
+        $bengaliStudentData = student::where([
+            ['years', $request->year],
+            ['Roll', $request->Roll],
+            ['reg_id', $request->reg_id],
+            ['CID', 2]
+        ])->get();
 
-    return $pdf->download($fileName);
+        return Inertia::render('marhala/cirtificateProvide', [
+            'bengaliYears' => $bengaliYears,
+            'bengaliStudentData' => $bengaliStudentData
+        ]);
+    }
+
+    public function generatePdf($Roll, $reg_id)
+    {
+        $details = students_number_potrro::where('CID', 2)
+            ->where('Roll', $Roll)
+            ->where('reg_id', $reg_id)
+            ->firstOrFail();
+
+        $pdf = PDF::loadView('pdfs.student-certificate', [
+            'studentDetails' => $details,
+        ])
+            ->setPaper('A4')
+            ->set_option('isHtml5ParserEnabled', true)
+            ->set_option('isPhpEnabled', true);
+
+        $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
+
+        return $pdf->download($fileName);
+    }
 }
-
-
-
-
-
-
-
-
-
-}
-
-
