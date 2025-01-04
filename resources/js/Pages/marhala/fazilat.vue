@@ -9,6 +9,7 @@ import { Link } from '@inertiajs/vue3';
 
 
 import Dashboard from '../Dashboard.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
 
 const props = defineProps({
     students: Object,
@@ -162,12 +163,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="mt-4 pt-4 border-t border-purple-100">
-                <!-- <div class="flex items-center text-sm text-purple-600">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span>১২% বৃদ্ধি গত মাস থেকে</span>
-                </div> -->
+
             </div>
         </div>
 
@@ -188,12 +184,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="mt-4 pt-4 border-t border-blue-100">
-                <!-- <div class="flex items-center text-sm text-blue-600">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span>৮% বৃদ্ধি গত মাস থেকে</span>
-                </div> -->
+
             </div>
         </div>
 
@@ -214,12 +205,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="mt-4 pt-4 border-t border-pink-100">
-                <!-- <div class="flex items-center text-sm text-pink-600">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span>১৫% বৃদ্ধি গত মাস থেকে</span>
-                </div> -->
+
             </div>
         </div>
 
@@ -240,12 +226,7 @@ onMounted(() => {
                 </div>
             </div>
             <div class="mt-4 pt-4 border-t border-emerald-100">
-                <!-- <div class="flex items-center text-sm text-emerald-600">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span>২০% বৃদ্ধি গত বছর থেকে</span>
-                </div> -->
+
             </div>
         </div>
     </div>
@@ -264,62 +245,89 @@ onMounted(() => {
 
         <div class="p-6 bg-gray-50 min-h-screen">
         <div class="bg-white shadow-xl rounded-xl p-6">
-            <div class="my-5">
-                <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 flex items-center gap-2 shadow-sm">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Export
-                </button>
-            </div>
 
-            <div class="flex justify-between items-center mb-6">
-                <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="flex items-center gap-4 w-full">
+  <div class="grid grid-cols-1 gap-6 mb-6">
+        <!-- Filter Section -->
+        <div class="bg-white shadow-xl rounded-xl">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-800">ফিল্টার অপশন</h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-5 gap-4">
                     <select
                         v-if="years.length > 0"
-                        @change="filterByYear"
                         v-model="selectedYear"
-                        class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                        @change="filterByYear"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
                     >
                         <option value="">বছর নির্বাচন করুন</option>
                         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
                     </select>
 
                     <select
-    v-if="years.length > 0"
-    @change="filterBySRtype"
-    v-model="selectedSRType"
-    class="px-4 py-2.5 w-48 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
->
-    <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
-    <option value="1">ছাত্র</option>
-    <option value="0">ছাত্রী</option>
-</select>
+                        v-model="selectedDivision"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    >
+                        <option value="">বিভাগ নির্বাচন করুন</option>
+                        <!-- Division options -->
+                    </select>
 
+                    <select
+                        v-model="selectedDistrict"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    >
+                        <option value="">জেলা নির্বাচন করুন</option>
+                        <!-- District options -->
+                    </select>
 
-<div class="relative flex-1">
-                <input
-                    type="text"
-                    v-model="Roll"
-                    placeholder="রোল নম্বর লিখুন"
-                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
-                />
+                    <select
+                        v-model="selectedThana"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    >
+                        <option value="">থানা নির্বাচন করুন</option>
+                        <!-- Thana options -->
+                    </select>
+
+                    <select
+                        v-model="selectedSRType"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    >
+                        <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                        <option value="1">ছাত্র</option>
+                        <option value="0">ছাত্রী</option>
+                    </select>
+                </div>
             </div>
+        </div>
 
-            <div class="relative flex-1">
-                <input
-                    type="text"
-                    v-model="reg_id"
-                    placeholder="রেজিস্ট্রেশন নম্বর লিখুন"
-                    class="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
-                />
+        <!-- Search Section -->
+        <div class="bg-white shadow-xl rounded-xl">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-800">অনুসন্ধান</h2>
             </div>
-
-
-
+            <div class="p-6">
+                <div class="grid grid-cols-4 gap-4">
+                    <input
+                        type="text"
+                        v-model="Roll"
+                        placeholder="রোল নম্বর লিখুন"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    />
+                    <input
+                        type="text"
+                        v-model="Roll2"
+                        placeholder="দ্বিতীয় রোল নম্বর"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    />
+                    <input
+                        type="text"
+                        v-model="reg_id"
+                        placeholder="ইলহাক নম্বর লিখুন"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    />
                     <button
                         @click="searchStudent"
-                        class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center gap-2 shadow-sm"
+                        class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center gap-2"
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -328,6 +336,31 @@ onMounted(() => {
                     </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="bg-white shadow-xl rounded-xl">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-800">অ্যাকশন</h2>
+            </div>
+            <div class="p-6">
+                <div class="flex gap-4">
+                    <PrimaryButton class="bg-green-600 hover:bg-green-700">
+                        এক্সপোর্ট
+                    </PrimaryButton>
+                    <PrimaryButton class="bg-blue-600 hover:bg-blue-700">
+                        প্রিন্ট
+                    </PrimaryButton>
+                    <PrimaryButton class="bg-red-600 hover:bg-red-700">
+                        পিডিএফ ডাওনলোড
+                    </PrimaryButton>
+                    <PrimaryButton class="bg-purple-600 hover:bg-purple-700">
+                        মাদরাসাওয়ারী বিস্তারিত তথ্য
+                    </PrimaryButton>
+                </div>
+            </div>
+        </div>
+    </div>
 
             <div class="overflow-hidden rounded-xl border border-gray-200">
                 <table style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="w-full">
@@ -340,11 +373,12 @@ onMounted(() => {
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">নাম</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">পিতার নাম</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">মাদরাসার নাম</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">মাদরাসার ইলহাক</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">ক্লাস</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বছর</th>
-                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">জন্মতারিখ</th>
-                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">রোল</th>
-                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">রেজিস্ট্রেশন</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বিভাগ</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">জেলা</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">থানা</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বিস্তারিত</th>
                         </tr>
                     </thead>
@@ -357,6 +391,7 @@ onMounted(() => {
                             <td class="px-6 py-4 text-md font-semibold  whitespace-nowrap">{{ student.Name }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Father }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Madrasha }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{  }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Class }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.years }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.DateofBirth }}</td>
@@ -364,12 +399,19 @@ onMounted(() => {
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.reg_id }}</td>
                             <td class="px-6 py-4  whitespace-nowrap">
                                 <Link :href="route('marhala.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })"
-                                      class="text-blue-600 hover:text-blue-800 transition-colors duration-150">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c-4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                </Link>
+    class="text-blue-600 hover:text-blue-800 transition-colors duration-150 group"
+>
+    <svg xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 transform group-hover:scale-110 transition-all duration-200"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+    >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+    </svg>
+</Link>
+
                             </td>
                         </tr>
                     </tbody>

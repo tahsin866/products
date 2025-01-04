@@ -82,7 +82,7 @@ function handleImageError() {
                     <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                         <!-- Certificate Creation Card -->
                         <a
-                            href="/certificates/create"
+                            href="route('applicationForm')"
                             class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg transition hover:shadow-xl"
                         >
                             <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-100">

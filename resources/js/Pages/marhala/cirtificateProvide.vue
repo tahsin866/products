@@ -4,6 +4,7 @@ import { useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 
 
@@ -166,7 +167,7 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
                 <!-- Your existing search section -->
                 <div class="bg-white rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-gray-800 mb-8">আরবি সনদপত্র অনুসন্ধান</h2>
-                    <form @submit.prevent="handleSearch('arabic')" class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <form @submit.prevent="validateAndSearchArabic('arabic')" class="grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div class="space-y-2">
                             <label class="block text-md font-semibold text-gray-700">বছর নির্বাচন করুন</label>
                             <select v-model="arabicForm.year"
@@ -193,7 +194,7 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
                         </div>
 
                         <div class="flex items-end">
-                            <button type="submit" :disabled="arabicLoading" class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700
+                            <PrimaryButton type="submit" :disabled="arabicLoading" class="w-full text-white px-6 py-3 rounded-lg hover:bg-indigo-700
                                        transition-all duration-200 disabled:opacity-50 font-semibold shadow-md
                                        hover:shadow-lg flex items-center justify-center space-x-2">
                                 <svg v-if="arabicLoading" class="animate-spin h-5 w-5"
@@ -204,7 +205,7 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
                                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                 </svg>
                                 <span>{{ arabicLoading ? 'অনুসন্ধান করা হচ্ছে...' : 'অনুসন্ধান করুন' }}</span>
-                            </button>
+                            </PrimaryButton>
                         </div>
                     </form>
                 </div>
