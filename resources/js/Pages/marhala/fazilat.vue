@@ -11,6 +11,11 @@ import { Link } from '@inertiajs/vue3';
 import Dashboard from '../Dashboard.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 
+// Add reg_id to your reactive state declarations
+const reg_id = ref('')
+const Roll2 = ref('')
+const Roll = ref('')
+// Include it in your props definition
 const props = defineProps({
     students: Object,
     years: Array,
@@ -19,15 +24,16 @@ const props = defineProps({
     yearCount: Number,
     maleCount: Number,
     femaleCount: Number,
-
+    SRType: Array,
+    // reg_id: {
+    //     type: String,
+    //     default: ''
+    // }
 })
 
 const yearCount = ref(props.yearCount || 0);
 const maleCount = ref(props.maleCount || 0);
 const femaleCount = ref(props.femaleCount || 0);
-
-
-
 
 
 
@@ -40,14 +46,13 @@ const students = ref({
 })
 
 const years = ref(props.years || [])
+const SRType = ref(props.SRType || [])
 
 // State for filters
 
 const selectedYear = ref(props.filters?.year || '')
+const selectedSRType = ref(props.filters?.SRType || '')
 
-const handleYearChange = () => {
-    console.log('Selected Year:', selectedYear.value)
-}
 
 // Watch for changes in selectedYear
 watch(selectedYear, (newYear) => {
@@ -61,11 +66,34 @@ const filterByYear = () => {
         route('marhala.fazilat'),
         {
             year: selectedYear.value,
+            SRType: selectedSRType.value, // Maintain SRType filter
             page: 1
         },
         {
             preserveState: true,
             preserveScroll: true,
+            replace: true,
+            onSuccess: (page) => {
+                students.value = page.props.students;
+                yearCount.value = page.props.yearCount;
+                maleCount.value = page.props.maleCount;
+                femaleCount.value = page.props.femaleCount;
+            },
+        }
+    );
+};
+const filterBySRType = () => {
+    router.get(
+        route('marhala.fazilat'),
+        {
+            SRType: selectedSRType.value,
+            year: selectedYear.value, // Maintain year filter
+            page: 1
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
             onSuccess: (page) => {
                 students.value = page.props.students;
                 yearCount.value = page.props.yearCount;
@@ -77,42 +105,36 @@ const filterByYear = () => {
 };
 
 
-// const selectedSRType = ref('')
-
-// const filterBySRtype = () => {
-//     router.get(
-//         route('marhala.filterBySRType'),
-//         {
-//             SRType: selectedSRType.value,
-//             page: 1
-//         },
-//         {
-//             preserveState: true,
-//             preserveScroll: true,
-//             onSuccess: (page) => {
-//                 students.value = page.props.students
-//             }
-//         }
-//     )
-// }
-
-
-// searchFiled
 
 
 
-const Roll = ref('')
-const reg_id = ref('')
+const pageInput = ref('')
 
-const searchStudent = () => {
-    Inertia.get(route('marhala.search'), {
-        Roll: Roll.value,
-        reg_id: reg_id.value
-    }, {
-        preserveState: true,
-        preserveScroll: true
-    })
+const goToPage = () => {
+    if (pageInput.value >= 1 && pageInput.value <= students.value.last_page) {
+        router.get(
+            route('marhala.fazilat'),
+            {
+                page: pageInput.value,
+                year: selectedYear.value,
+                SRType: selectedSRType.value
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                onSuccess: (page) => {
+                    students.value = page.props.students;
+                    yearCount.value = page.props.yearCount;
+                    maleCount.value = page.props.maleCount;
+                    femaleCount.value = page.props.femaleCount;
+                }
+            }
+        )
+    }
 }
+
+
 
 
 
@@ -128,6 +150,7 @@ onMounted(() => {
     console.log('Props on mount:', {
         students: students.value,
         years: years.value
+        // SRType: SRType.value
     })
 })
 
@@ -264,6 +287,26 @@ onMounted(() => {
                         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
                     </select>
 
+
+                    <select
+                    v-if ="SRType.length > 0"
+                        v-model="selectedSRType"
+                        @change="filterBySRType"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                    >
+                        <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                        <option value="1">ছাত্র</option>
+                        <option value="0">ছাত্রী</option>
+                    </select>
+
+
+
+
+
+
+
+
+
                     <select
                         v-model="selectedDivision"
                         class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
@@ -288,14 +331,7 @@ onMounted(() => {
                         <!-- Thana options -->
                     </select>
 
-                    <select
-                        v-model="selectedSRType"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
-                    >
-                        <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
-                        <option value="1">ছাত্র</option>
-                        <option value="0">ছাত্রী</option>
-                    </select>
+
                 </div>
             </div>
         </div>
@@ -373,7 +409,7 @@ onMounted(() => {
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">নাম</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">পিতার নাম</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">মাদরাসার নাম</th>
-                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">মাদরাসার ইলহাক</th>
+                            <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">ইলহাক</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">ক্লাস</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বছর</th>
                             <th class="px-6 py-3 text-left text-md font-semibolt text-gray-500 uppercase tracking-wider">বিভাগ</th>
@@ -391,10 +427,10 @@ onMounted(() => {
                             <td class="px-6 py-4 text-md font-semibold  whitespace-nowrap">{{ student.Name }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Father }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Madrasha }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{  }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Elhaq }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Class }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.years }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.DateofBirth }}</td>
+                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">         {{ student.madrasha ? student.madrasha.MName_uni : "N/A" }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Roll }}</td>
                             <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.reg_id }}</td>
                             <td class="px-6 py-4  whitespace-nowrap">
@@ -418,27 +454,90 @@ onMounted(() => {
                 </table>
             </div>
 
-            <nav v-if="students?.links?.length > 1" class="flex items-center justify-between mt-6">
-                <div class="text-sm text-gray-700">
-                    Showing {{ students.from }} to {{ students.to }} of {{ students.total }} results
-                </div>
-                <ul class="inline-flex items-center -space-x-px rounded-md shadow-sm">
-                    <li v-for="(link, index) in students.links" :key="index">
-                        <a v-if="link.url" :href="link.url"
-                            :class="[
-                                'relative inline-flex items-center px-4 py-2 text-sm font-medium border',
-                                link.active
-                                    ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                                    : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-                                index === 0 ? 'rounded-l-md' : '',
-                                index === students.links.length - 1 ? 'rounded-r-md' : ''
-                            ]"
-                            v-html="link.label">
-                        </a>
-                        <span v-else v-html="link.label" class="relative inline-flex items-center px-4 py-2 text-sm font-medium border border-gray-300 bg-white text-gray-500"></span>
-                    </li>
-                </ul>
-            </nav>
+<!-- page search -->
+
+
+            <div class="flex items-center gap-4 mb-4 mt-5">
+    <div class="flex items-center gap-2">
+        <input
+            type="number"
+            v-model="pageInput"
+            class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            min="1"
+            :max="students.last_page"
+            placeholder="Page"
+        />
+        <button
+            @click="goToPage"
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+            Go
+        </button>
+    </div>
+    <span class="text-sm text-gray-600">
+        of {{ students.last_page }} pages
+    </span>
+</div>
+
+
+            <nav
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    v-if="students?.links?.length > 1"
+    class="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 bg-white p-4 rounded-lg shadow-sm"
+>
+    <!-- Results Counter -->
+    <div class="text-sm text-gray-700 font-medium">
+        <span class="hidden md:inline">Showing </span>
+        <span class="font-semibold text-gray-900">{{ students.from }}</span>
+        <span class="hidden md:inline"> to </span>
+        <span class="font-semibold text-gray-900">{{ students.to }}</span>
+        <span class="hidden md:inline"> of </span>
+        <span class="font-semibold text-gray-900">
+            {{ selectedSRType ? (selectedSRType === '0' ? femaleCount : maleCount) : students.total }}
+        </span>
+        <span class="hidden md:inline"> results</span>
+    </div>
+
+    <!-- Pagination Links -->
+    <ul class="inline-flex items-center gap-px">
+        <li v-for="(link, index) in students.links" :key="index">
+            <Link
+                v-if="link.url"
+                :href="link.url"
+                :class="[
+                    'relative inline-flex items-center px-4 py-2.5 text-sm font-medium transition-colors duration-200',
+                    link.active
+                        ? 'z-10 bg-blue-600 text-white hover:bg-blue-700'
+                        : 'bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600',
+                    'border border-gray-200',
+                    index === 0 ? 'rounded-l-lg' : '',
+                    index === students.links.length - 1 ? 'rounded-r-lg' : '',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                ]"
+                v-html="link.label"
+            />
+            <span
+                v-else
+                v-html="link.label"
+                class="relative inline-flex items-center px-4 py-2.5 text-sm font-medium bg-gray-50 text-gray-400 border border-gray-200 cursor-not-allowed"
+            />
+        </li>
+    </ul>
+</nav>
+
         </div>
     </div>
     </AuthenticatedLayout>

@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 
 class fazilatController extends Controller
 {
+
+
     public function demo(Request $request)
     {
         // Cache distinct years for optimization
@@ -18,15 +20,35 @@ class fazilatController extends Controller
             return students_number_potrro::select('years')->distinct()->pluck('years');
         });
 
+
+        $SRType = Cache::remember('distinct_SRType', 60, function () {
+            return students_number_potrro::select('SRType')->distinct()->pluck('SRType');
+        });
+
+
+
+
+
         $query = students_number_potrro::where('CID', 2);
 
         $totalCount = Cache::remember('total_count', 60, function () {
             return students_number_potrro::where('CID', 2)->count();
         });
 
+
+
+
+
+
+
+
+
+
         $yearCount = 0;
         $maleCount = 0;
         $femaleCount = 0;
+
+
 
         if ($request->year) {
             $query->where('years', $request->year);
@@ -42,25 +64,62 @@ class fazilatController extends Controller
             $femaleCount = $counts->female;
         }
 
-        if ($request->filled('Roll') && $request->filled('reg_id')) {
-            $query->where('Roll', 'like', '%' . $request->Roll . '%')
-                  ->where('reg_id', 'like', '%' . $request->reg_id . '%');
+        // if ($request->filled('Roll') && $request->filled('reg_id')) {
+        //     $query->where('Roll', 'like', '%' . $request->Roll . '%')
+        //           ->where('reg_id', 'like', '%' . $request->reg_id . '%');
+        // }
+
+
+
+
+
+        if ($request->SRType) {
+            $query->where('SRType', $request->SRType);
+
+            // Update counts for SRType filter
+            $counts = students_number_potrro::where('CID', 2)
+                ->where('SRType', $request->SRType)
+                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN SRType = 1 THEN 1 ELSE 0 END) as male, SUM(CASE WHEN SRType = 0 THEN 1 ELSE 0 END) as female')
+                ->first();
+
+            $yearCount = $counts->total;
+            $maleCount = $counts->male;
+            $femaleCount = $counts->female;
         }
+
+
+
+
+
+
+
+
+
 
         $students = $query->paginate(15)->withQueryString();
 
         return Inertia::render('marhala/fazilat', [
             'students' => $students,
+            'SRType' => $SRType,
             'years' => $years,
+            // 'studentsNumberPotrro' =>$studentsNumberPotrro,
             'filters' => [
-                'year' => $request->year
+                'year' => $request->year,
+                'SRType' => $request->SRType
             ],
             'studentCount' => $totalCount,
             'yearCount' => $yearCount,
             'maleCount' => $maleCount,
             'femaleCount' => $femaleCount,
         ]);
+
+
+
+
     }
+
+
+
 
     public function details($Roll, $reg_id)
     {

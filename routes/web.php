@@ -47,11 +47,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/marhala/fazilat', [fazilatController::class, 'demo'])->name('marhala.fazilat');
 Route::get('/marhala/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('marhala.fazilatDetailes');
 Route::put('/marhala/update', [fazilatController::class, 'update'])->name('marhala.update');
-// Route::get('/marhala/filterBySRType', [fazilatController::class, 'filterBySRType'])->name('marhala.filterBySRType');
-Route::get('/marhala/search', [fazilatController::class, 'search'])->name('students.search');
-
 Route::get('/marhala/cirtificateProvide', [FazilatController::class, 'cirtificateProvide'])->name('marhala.cirtificateProvide');
-// Route::post('/marhala/cirtificateSearch', [FazilatController::class, 'cirtificateSearch'])->name('marhala.cirtificateSearch');
 Route::get('/marhala/search', [fazilatController::class, 'search'])->name('marhala.search');
 Route::get('/marhala/searchBn', [fazilatController::class, 'searchBn'])->name('marhala.searchBn');
 
@@ -60,8 +56,7 @@ Route::get('/marhala/certificate/{Roll}/{reg_id}', [fazilatController::class, 'g
 
 Route::get('/applicationForm', function () {
     return inertia::render('applicationForm');
-});
-
+})->name('applicationForm');
 
 
 
