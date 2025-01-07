@@ -65,7 +65,7 @@ const getGrade = (marks) => {
 
 const updateProfile = () => {
     isLoading.value = true
-    router.put(route('marhala.update'), studentDetails, {
+    router.put(route('fazilat.update'), studentDetails, {
         preserveScroll: true,
         onSuccess: () => {
             isLoading.value = false
@@ -84,7 +84,7 @@ const updateProfile = () => {
 
 
 const downloadCertificate = () => {
-    window.location.href = route('marhala.certificate.pdf', {
+    window.location.href = route('fazilat.certificate.pdf', {
         Roll: studentDetails.Roll,
         reg_id: studentDetails.reg_id
     });
@@ -98,7 +98,7 @@ const downloadCertificate = () => {
 
 
     <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="min-h-screen bg-gray-50 py-12">
-        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('marhala.fazilat'))">
+        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('fazilat.fazilat'))">
     BACK
 </PrimaryButton>
 
@@ -226,6 +226,14 @@ const downloadCertificate = () => {
                 </tr>
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-md font-semibold text-gray-600">রেজিস্ট্রেশন নম্বর</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.reg_id }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">
                         <span class="text-md font-semibold text-gray-600">জন্ম-তারিখ</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -279,11 +287,16 @@ const downloadCertificate = () => {
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="text-lg font-medium text-gray-900">{{ studentDetails.MadrashaNameEn }}</span>
                     </td>
+
+                    <!-- {{ studentDetails.madrasha ? studentDetails.madrasha.Thana_uni : "N/A" }} -->
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+
+
 
 <div class="mt-6 mb-5">
     <PrimaryButton

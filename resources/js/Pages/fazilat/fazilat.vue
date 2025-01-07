@@ -29,6 +29,10 @@ const props = defineProps({
     //     type: String,
     //     default: ''
     // }
+    searchElhaq: Array,
+    division: Array,
+    // districts: Array,
+    // thanas: Array
 })
 
 const yearCount = ref(props.yearCount || 0);
@@ -47,12 +51,13 @@ const students = ref({
 
 const years = ref(props.years || [])
 const SRType = ref(props.SRType || [])
+const division = ref(props.division || [])
 
 // State for filters
 
 const selectedYear = ref(props.filters?.year || '')
 const selectedSRType = ref(props.filters?.SRType || '')
-
+const selecteddivision = ref(props.filters?.division || '')
 
 // Watch for changes in selectedYear
 watch(selectedYear, (newYear) => {
@@ -63,7 +68,7 @@ watch(selectedYear, (newYear) => {
 
 const filterByYear = () => {
     router.get(
-        route('marhala.fazilat'),
+        route('fazilat.fazilat'),
         {
             year: selectedYear.value,
             SRType: selectedSRType.value, // Maintain SRType filter
@@ -84,10 +89,36 @@ const filterByYear = () => {
 };
 const filterBySRType = () => {
     router.get(
-        route('marhala.fazilat'),
+        route('fazilat.fazilat'),
         {
             SRType: selectedSRType.value,
             year: selectedYear.value, // Maintain year filter
+            page: 1
+        },
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            onSuccess: (page) => {
+                students.value = page.props.students;
+                yearCount.value = page.props.yearCount;
+                maleCount.value = page.props.maleCount;
+                femaleCount.value = page.props.femaleCount;
+            },
+        }
+    );
+};
+
+
+
+
+
+const filterBydivision = () => {
+    router.get(
+        route('fazilat.fazilat'),
+        {
+            SRType: selecteddivision.value,
+            year: selecteddivision.value, // Maintain year filter
             page: 1
         },
         {
@@ -113,11 +144,12 @@ const pageInput = ref('')
 const goToPage = () => {
     if (pageInput.value >= 1 && pageInput.value <= students.value.last_page) {
         router.get(
-            route('marhala.fazilat'),
+            route('fazilat.searchElhaq'),
             {
                 page: pageInput.value,
                 year: selectedYear.value,
-                SRType: selectedSRType.value
+                SRType: selectedSRType.value,
+                Elhaq: form.Elhaq  // Remove .value here
             },
             {
                 preserveState: true,
@@ -135,6 +167,57 @@ const goToPage = () => {
 }
 
 
+
+const form = ref({
+    Elhaq: ''
+});
+
+
+const searchResults = ref(null)
+
+const searchStudent = () => {
+    if (!form.value.Elhaq) {
+        return;
+    }
+
+    router.visit(route('fazilat.searchElhaq', {
+        Elhaq: form.value.Elhaq,
+        year: selectedYear.value
+    }), {
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: (page) => {
+            students.value = page.props.students;
+            yearCount.value = page.props.yearCount;
+            maleCount.value = page.props.maleCount;
+            femaleCount.value = page.props.femaleCount;
+        }
+    });
+};
+
+
+// const selectedDivision = ref('')
+// const selectedDistrict = ref('')
+// const selectedThana = ref('')
+
+// const filteredDistricts = computed(() => {
+//     if (!selectedDivision.value) return []
+//     return props.districts.filter(district => district.DID === parseInt(selectedDivision.value))
+// })
+
+// const filteredThanas = computed(() => {
+//     if (!selectedDistrict.value) return []
+//     return props.thanas.filter(thana => thana.Des_ID === parseInt(selectedDistrict.value))
+// })
+
+// watch(selectedDivision, () => {
+//     selectedDistrict.value = ''
+//     selectedThana.value = ''
+// })
+
+// watch(selectedDistrict, () => {
+//     selectedThana.value = ''
+// })
 
 
 
@@ -301,36 +384,30 @@ onMounted(() => {
 
 
 
-
-
-
-
-
-
                     <select
-                        v-model="selectedDivision"
+                    v-if ="division.length > 0"
+                        v-model="selecteddivision"
+                        @change="filterBydivision"
                         class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
                     >
-                        <option value="">বিভাগ নির্বাচন করুন</option>
-                        <!-- Division options -->
+                        <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                        <!-- <option value="1">ছাত্র</option>
+                        <option value="0">ছাত্রী</option> -->
                     </select>
 
-                    <select
-                        v-model="selectedDistrict"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
-                    >
-                        <option value="">জেলা নির্বাচন করুন</option>
-                        <!-- District options -->
-                    </select>
+<select v-model="selectedDistrict" class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg">
+    <option value="">জেলা নির্বাচন করুন</option>
+    <option v-for="district in filteredDistricts" :key="district.DesID" :value="district.DesID">
+        {{ district.district }}
+    </option>
+</select>
 
-                    <select
-                        v-model="selectedThana"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
-                    >
-                        <option value="">থানা নির্বাচন করুন</option>
-                        <!-- Thana options -->
-                    </select>
-
+<select v-model="selectedThana" class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg">
+    <option value="">থানা নির্বাচন করুন</option>
+    <option v-for="thana in filteredThanas" :key="thana.ID" :value="thana.ID">
+        {{ thana.thana }}
+    </option>
+</select>
 
                 </div>
             </div>
@@ -355,15 +432,18 @@ onMounted(() => {
                         placeholder="দ্বিতীয় রোল নম্বর"
                         class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
                     />
-                    <input
-                        type="text"
-                        v-model="reg_id"
-                        placeholder="ইলহাক নম্বর লিখুন"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
-                    />
+                <input
+            type="text"
+            v-model="form.Elhaq"
+
+            placeholder="ইলহাক নম্বর লিখুন"
+            class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+            @input="search"
+        />
                     <button
-                        @click="searchStudent"
-                        class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center gap-2"
+                    @click="searchStudent()"
+    class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center gap-2"
+
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -419,38 +499,29 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        <tr v-for="(student, index) in students.data" :key="student.id" class="hover:bg-gray-50 transition-colors duration-150">
-                            <td class="px-6 py-4 whitespace-nowrap">{{ (students.current_page - 1) * students.per_page + (index + 1) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                            </td>
-                            <td class="px-6 py-4 text-md font-semibold  whitespace-nowrap">{{ student.Name }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Father }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Madrasha }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Elhaq }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Class }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.years }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">         {{ student.madrasha ? student.madrasha.MName_uni : "N/A" }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Roll }}</td>
-                            <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.reg_id }}</td>
-                            <td class="px-6 py-4  whitespace-nowrap">
-                                <Link :href="route('marhala.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })"
-    class="text-blue-600 hover:text-blue-800 transition-colors duration-150 group"
->
-    <svg xmlns="http://www.w3.org/2000/svg"
-        class="w-5 h-5 transform group-hover:scale-110 transition-all duration-200"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-    >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-    </svg>
-</Link>
-
-                            </td>
-                        </tr>
-                    </tbody>
+                <tr v-for="(student, index) in students.data" :key="student.id" class="hover:bg-gray-50 transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap">{{ index + 1 }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    </td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Name }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Father }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Madrasha }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Elhaq }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.Class }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.years }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.madrasha ? student.madrasha.division : "N/A" }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.madrasha ? student.madrasha.district : "N/A" }}</td>
+                    <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.madrasha ? student.madrasha.Thana_uni : "N/A" }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <Link :href="route('fazilat.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })" class="text-blue-600 hover:text-blue-800 transition-colors duration-150 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform group-hover:scale-110 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </Link>
+                    </td>
+                </tr>
+            </tbody>
                 </table>
             </div>
 
@@ -483,18 +554,6 @@ onMounted(() => {
             <nav
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     v-if="students?.links?.length > 1"
     class="flex flex-col md:flex-row items-center justify-between gap-4 mt-8 bg-white p-4 rounded-lg shadow-sm"
 >
@@ -514,21 +573,28 @@ onMounted(() => {
     <!-- Pagination Links -->
     <ul class="inline-flex items-center gap-px">
         <li v-for="(link, index) in students.links" :key="index">
-            <Link
-                v-if="link.url"
-                :href="link.url"
-                :class="[
-                    'relative inline-flex items-center px-4 py-2.5 text-sm font-medium transition-colors duration-200',
-                    link.active
-                        ? 'z-10 bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600',
-                    'border border-gray-200',
-                    index === 0 ? 'rounded-l-lg' : '',
-                    index === students.links.length - 1 ? 'rounded-r-lg' : '',
-                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                ]"
-                v-html="link.label"
-            />
+        <!-- Pagination Links -->
+
+<Link
+    v-if="link.url"
+    :href="link.url +
+        (form.Elhaq ? `&Elhaq=${form.Elhaq}` : '') +
+        (selectedYear.value ? `&year=${selectedYear.value}` : '') +
+        (selectedSRType.value ? `&SRType=${selectedSRType.value}` : '')"
+    :class="[
+        'relative inline-flex items-center px-4 py-2.5 text-sm font-medium transition-colors duration-200',
+        link.active
+            ? 'z-10 bg-blue-600 text-white hover:bg-blue-700'
+            : 'bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600',
+        'border border-gray-200',
+        index === 0 ? 'rounded-l-lg' : '',
+        index === students.links.length - 1 ? 'rounded-r-lg' : '',
+        'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+    ]"
+    v-html="link.label"
+/>
+
+
             <span
                 v-else
                 v-html="link.label"

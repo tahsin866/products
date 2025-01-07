@@ -10,7 +10,7 @@ class madrasha extends Model
 {
 
 protected $table= 'madrasha';
-protected $primaryke = 'id';
+protected $primarykey = 'id';
 
 
 

@@ -18,14 +18,25 @@ return [
     /*
      * Dejavu Sans font is missing glyphs for converted entities, turn it off if you need to show € and £.
      */
+
+
+
+
+
+
+
+
+
+
+
     'convert_entities' => true,
 
     'options' => [
 
-        'font_dir' => storage_path('fonts'), // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)
+        'font_dir' => storage_path('fonts/SolaimanLipi.ttf'), // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)
 
 
-        'font_cache' => storage_path('fonts'),
+        'font_cache' => storage_path('fonts/SolaimanLipi.ttf'),
 
 
         'temp_dir' => sys_get_temp_dir(),
@@ -249,5 +260,10 @@ return [
          */
         'enable_html5_parser' => true,
     ],
+
+
+
+
+
 
 ];

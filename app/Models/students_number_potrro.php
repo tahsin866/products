@@ -20,6 +20,7 @@ class students_number_potrro extends Model
         'Father',
         'mobileNumber',
         'st_en_Fname',
+        'Elhaq',
         'DateofBirth'
     ];
 

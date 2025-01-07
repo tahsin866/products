@@ -44,14 +44,41 @@ Route::middleware('auth')->group(function () {
 //  Route::get('/student-count', [FazilatController::class, 'count'])->name('student.count');
 //  Route::post('/search-student', [fazilatController::class, 'search'])->name('search-student.post');
 
-Route::get('/marhala/fazilat', [fazilatController::class, 'demo'])->name('marhala.fazilat');
-Route::get('/marhala/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('marhala.fazilatDetailes');
-Route::put('/marhala/update', [fazilatController::class, 'update'])->name('marhala.update');
-Route::get('/marhala/cirtificateProvide', [FazilatController::class, 'cirtificateProvide'])->name('marhala.cirtificateProvide');
-Route::get('/marhala/search', [fazilatController::class, 'search'])->name('marhala.search');
-Route::get('/marhala/searchBn', [fazilatController::class, 'searchBn'])->name('marhala.searchBn');
 
-Route::get('/marhala/certificate/{Roll}/{reg_id}', [fazilatController::class, 'generatePdf'])->name('marhala.certificate.pdf');
+// takmil
+
+
+Route::get('/takmil/takmil', [sanawiaController::class, 'takmil'])->name('takmil.takmil');
+Route::get('/takmil/sanawaiaDetailes/{Roll}/{reg_id}', [sanawiaController::class, 'details'])->name('takmil.sanawaiaDetailes');
+
+Route::put('/takmil/update', [sanawiaController::class, 'update'])->name('takmil.update');
+Route::get('/takmil/sanawiacirtificateProvide', [sanawiaController::class, 'sanawiacirtificateProvide'])->name('takmil.sanawiacirtificateProvide');
+Route::get('/takmil/search', [sanawiaController::class, 'search'])->name('takmil.search');
+Route::get('/takmil/searchBn', [sanawiaController::class, 'searchBn'])->name('takmil.searchBn');
+Route::get('/takmil/searchElhaq', [sanawiaController::class, 'searchElhaq'])->name('takmil.searchElhaq');
+Route::get('/takmil/certificate/{Roll}/{reg_id}', [sanawiaController::class, 'generatePdf'])->name('takmil.certificate.pdf');
+
+
+
+
+
+
+
+
+
+
+
+
+// fazilat
+
+Route::get('/fazilat/fazilat', [fazilatController::class, 'demo'])->name('fazilat.fazilat');
+Route::get('/fazilat/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('fazilat.fazilatDetailes');
+Route::put('/fazilat/update', [fazilatController::class, 'update'])->name('fazilat.update');
+Route::get('/fazilat/cirtificateProvide', [FazilatController::class, 'cirtificateProvide'])->name('fazilat.cirtificateProvide');
+Route::get('/fazilat/search', [fazilatController::class, 'search'])->name('fazilat.search');
+Route::get('/fazilat/searchBn', [fazilatController::class, 'searchBn'])->name('fazilat.searchBn');
+Route::get('/fazilat/searchElhaq', [fazilatController::class, 'searchElhaq'])->name('fazilat.searchElhaq');
+Route::get('/fazilat/certificate/{Roll}/{reg_id}', [fazilatController::class, 'generatePdf'])->name('fazilat.certificate.pdf');
 
 
 Route::get('/applicationForm', function () {
@@ -59,11 +86,30 @@ Route::get('/applicationForm', function () {
 })->name('applicationForm');
 
 
+// sanawia
+
+Route::get('/sanawia/sanawaia', [sanawiaController::class, 'sanawia'])->name('sanawia.sanawaia');
+Route::get('/sanawia/sanawaiaDetailes/{Roll}/{reg_id}', [sanawiaController::class, 'details'])->name('sanawia.sanawaiaDetailes');
+
+Route::put('/sanawia/update', [sanawiaController::class, 'update'])->name('sanawia.update');
+Route::get('/sanawia/sanawiacirtificateProvide', [sanawiaController::class, 'sanawiacirtificateProvide'])->name('sanawia.sanawiacirtificateProvide');
+Route::get('/sanawia/search', [sanawiaController::class, 'search'])->name('sanawia.search');
+Route::get('/sanawia/searchBn', [sanawiaController::class, 'searchBn'])->name('sanawia.searchBn');
+Route::get('/sanawia/searchElhaq', [sanawiaController::class, 'searchElhaq'])->name('sanawia.searchElhaq');
+Route::get('/fazilat/certificate/{Roll}/{reg_id}', [sanawiaController::class, 'generatePdf'])->name('fazilat.certificate.pdf');
 
 
-Route::get('/marhala/sanawaia', [sanawiaController::class, 'sanawia'])->name('marhala.sanawaia');
 
 
+
+
+
+
+
+
+
+
+// Route::get('/fazilat/Division', [fazilatController::class, 'index'])->name('marhala.Division');
 
 
 

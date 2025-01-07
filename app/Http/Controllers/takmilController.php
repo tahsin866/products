@@ -1,24 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\student;
 use App\Models\students_number_potrro;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\student;
+
 use App\Models\Division;
 use App\Models\District;
 use App\Models\thana;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Cache;
 
-use function Laravel\Prompts\search;
 
-class fazilatController extends Controller
+
+class takmilController extends Controller
 {
 
-
-    public function demo(Request $request)
+    public function takmil(Request $request)
     {
         // Cache distinct years for optimization
         $years = Cache::remember('distinct_years', 60, function () {
@@ -36,12 +36,12 @@ class fazilatController extends Controller
         });
 
         $totalCount = Cache::remember('total_count', 60, function () {
-            return students_number_potrro::where('CID', 2)->count();
+            return students_number_potrro::where('CID', 3)->count();
         });
 
 
 
-        $query = students_number_potrro::where('CID', 2);
+        $query = students_number_potrro::where('CID', 1);
 
         // Initialize counts
         $yearCount = 0;
@@ -49,7 +49,7 @@ class fazilatController extends Controller
         $femaleCount = 0;
 
         // Base query for counts
-        $countsQuery = students_number_potrro::where('CID', 2);
+        $countsQuery = students_number_potrro::where('CID', 1);
 
         // Apply year filter if selected
         if ($request->year) {
@@ -76,7 +76,7 @@ class fazilatController extends Controller
 
         $students = $query->with('madrasha')->paginate(15)->withQueryString();
 
-        return Inertia::render('fazilat/fazilat', [
+        return Inertia::render('takmil/sanawaia', [
             'students' => $students,
             'SRType' => $SRType,
             'years' => $years,
@@ -106,7 +106,7 @@ class fazilatController extends Controller
             'year' => 'nullable|string'
         ]);
 
-        $query = students_number_potrro::query()->where('CID', 2);
+        $query = students_number_potrro::query()->where('CID', 1);
 
         // Apply year filter if selected
         if ($request->filled('year')) {
@@ -131,7 +131,7 @@ class fazilatController extends Controller
             SUM(CASE WHEN SRType = 0 THEN 1 ELSE 0 END) as female
         ')->first();
 
-        return Inertia::render('marhala/fazilat', [
+        return Inertia::render('takmil/sanawaia', [
             'students' => $searchResults,
             'yearCount' => $counts->total ?? 0,
             'maleCount' => $counts->male ?? 0,
@@ -173,12 +173,12 @@ class fazilatController extends Controller
 
     public function details($Roll, $reg_id)
     {
-        $details = students_number_potrro::where('CID', 2)
+        $details = students_number_potrro::where('CID', 1)
             ->where('Roll', $Roll)
             ->where('reg_id', $reg_id)
             ->firstOrFail();
 
-        return inertia::render('fazilat/fazilatDetailes', [
+        return inertia::render('takmil/sanawaiaDetailes', [
             'studentDetails' => $details,
         ]);
     }
@@ -200,87 +200,87 @@ class fazilatController extends Controller
 
 
 
-    public function cirtificateProvide()
-    {
-        $arabicYears = Cache::remember('arabic_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->get();
-        });
+    // public function sanawiacirtificateProvide()
+    // {
+    //     $arabicYears = Cache::remember('arabic_years', 60, function () {
+    //         return students_number_potrro::select('years')->distinct()->get();
+    //     });
 
-        $bengaliYears = Cache::remember('bengali_years', 60, function () {
-            return student::select('years')->distinct()->get();
-        });
+    //     $bengaliYears = Cache::remember('bengali_years', 60, function () {
+    //         return student::select('years')->distinct()->get();
+    //     });
 
-        return Inertia::render('fazilat/cirtificateProvide', [
-            'arabicYears' => $arabicYears,
-            'bengaliYears' => $bengaliYears,
-            'arabicStudentData' => [],
-            'bengaliStudentData' => []
-        ]);
-    }
+    //     return Inertia::render('sanawia/sanawiacirtificateProvide', [
+    //         'arabicYears' => $arabicYears,
+    //         'bengaliYears' => $bengaliYears,
+    //         'arabicStudentData' => [],
+    //         'bengaliStudentData' => []
+    //     ]);
+    // }
 
-    public function search(Request $request)
-    {
-        $arabicYears = Cache::remember('arabic_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->get();
-        });
+    // public function search(Request $request)
+    // {
+    //     $arabicYears = Cache::remember('arabic_years', 60, function () {
+    //         return students_number_potrro::select('years')->distinct()->get();
+    //     });
 
-        $bengaliYears = Cache::remember('bengali_years', 60, function () {
-            return student::select('years')->distinct()->get();
-        });
+    //     $bengaliYears = Cache::remember('bengali_years', 60, function () {
+    //         return student::select('years')->distinct()->get();
+    //     });
 
-        if (!$request->filled(['year', 'Roll', 'reg_id'])) {
-            return Inertia::render('fazilat/cirtificateProvide', [
-                'arabicYears' => $arabicYears,
-                'bengaliYears' => $bengaliYears,
-                'arabicStudentData' => []
-            ]);
-        }
+    //     if (!$request->filled(['year', 'Roll', 'reg_id'])) {
+    //         return Inertia::render('sanawia/sanawiacirtificateProvide', [
+    //             'arabicYears' => $arabicYears,
+    //             'bengaliYears' => $bengaliYears,
+    //             'arabicStudentData' => []
+    //         ]);
+    //     }
 
-        $arabicStudentData = students_number_potrro::where([
-            ['years', $request->year],
-            ['Roll', $request->Roll],
-            ['reg_id', $request->reg_id],
-            ['CID', 2]
-        ])->get();
+    //     $arabicStudentData = students_number_potrro::where([
+    //         ['years', $request->year],
+    //         ['Roll', $request->Roll],
+    //         ['reg_id', $request->reg_id],
+    //         ['CID', 2]
+    //     ])->get();
 
-        return Inertia::render('fazilat/cirtificateProvide', [
-            'arabicYears' => $arabicYears,
-            'bengaliYears' => $bengaliYears,
-            'arabicStudentData' => $arabicStudentData
-        ]);
-    }
+    //     return Inertia::render('sanawia/sanawiacirtificateProvide', [
+    //         'arabicYears' => $arabicYears,
+    //         'bengaliYears' => $bengaliYears,
+    //         'arabicStudentData' => $arabicStudentData
+    //     ]);
+    // }
 
-    public function searchBn(Request $request)
-    {
-        $arabicYears = Cache::remember('arabic_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->get();
-        });
+    // public function searchBn(Request $request)
+    // {
+    //     $arabicYears = Cache::remember('arabic_years', 60, function () {
+    //         return students_number_potrro::select('years')->distinct()->get();
+    //     });
 
-        $bengaliYears = Cache::remember('bengali_years', 60, function () {
-            return student::select('years')->distinct()->get();
-        });
+    //     $bengaliYears = Cache::remember('bengali_years', 60, function () {
+    //         return student::select('years')->distinct()->get();
+    //     });
 
-        if (!$request->filled(['year', 'Roll', 'reg_id'])) {
-            return Inertia::render('fazilat/cirtificateProvide', [
-                'arabicYears' => $arabicYears,
-                'bengaliYears' => $bengaliYears,
-                'bengaliStudentData' => []
-            ]);
-        }
+    //     if (!$request->filled(['year', 'Roll', 'reg_id'])) {
+    //         return Inertia::render('sanawaia/sanawiacirtificateProvide', [
+    //             'arabicYears' => $arabicYears,
+    //             'bengaliYears' => $bengaliYears,
+    //             'bengaliStudentData' => []
+    //         ]);
+    //     }
 
-        $bengaliStudentData = student::where([
-            ['years', $request->year],
-            ['Roll', $request->Roll],
-            ['reg_id', $request->reg_id],
-            ['CID', 2]
-        ])->get();
+    //     $bengaliStudentData = student::where([
+    //         ['years', $request->year],
+    //         ['Roll', $request->Roll],
+    //         ['reg_id', $request->reg_id],
+    //         ['CID', 2]
+    //     ])->get();
 
-        return Inertia::render('fazilat/cirtificateProvide', [
-            'arabicYears' => $arabicYears,
-            'bengaliYears' => $bengaliYears,
-            'bengaliStudentData' => $bengaliStudentData
-        ]);
-    }
+    //     return Inertia::render('sanawaia/sanawiacirtificateProvide', [
+    //         'arabicYears' => $arabicYears,
+    //         'bengaliYears' => $bengaliYears,
+    //         'bengaliStudentData' => $bengaliStudentData
+    //     ]);
+    // }
 
 
 
@@ -292,7 +292,7 @@ class fazilatController extends Controller
 
 
 
-        $details = students_number_potrro::where('CID', 2)
+        $details = students_number_potrro::where('CID', 3)
             ->where('Roll', $Roll)
             ->where('reg_id', $reg_id)
             ->firstOrFail();
@@ -308,4 +308,7 @@ class fazilatController extends Controller
 
         return $pdf->download($fileName);
     }
+
+
+
 }

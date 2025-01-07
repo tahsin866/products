@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Student Certificate</title>
-    <style>
-        @font-face {
-            font-family: 'XB Riyaz';
-            src: url('{{ storage_path('fonts/XB-Riyaz.ttf') }}') format('truetype');
-            font-weight: normal;
-        }
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="UTF-8">
+        <title>Student Certificate</title>
+        <style type="text/css">
+            body {
+                    margin: 0;
+                    font-size: 85%;
+                }
 
-        body {
-            font-family: 'XB Riyaz', Arial;
-            direction: rtl;
-        }
+                @font-face{
+                    font-family: "My-custom-font";
+                    src : url("solaimanLipi.ttf")
+                }
+                .custom-font{
+                    font: normal 20px/18px My-custom-font;
+                }
 
-        .arabic-text {
-            font-family: 'XB Riyaz', Arial;
-            text-align: right;
-            font-size: 18px;
-            line-height: 1.8;
-        }
-    </style>
-</head>
-<body>
-    <div class="arabic-text">
-        {{ $studentDetails->Name }}
-    </div>
-    <div class="arabic-text">
-        {{ $studentDetails->Roll }}
-    </div>
-    <div class="arabic-text">
-        {{ $studentDetails->reg_id }}
-    </div>
-</body>
+          </style>
+    </head>
+    <body>
+        <div class=  "custom-font">
+            {{ $studentDetails->Name }}
+        </div>
+        <div class="custom-font">
+            {{ $studentDetails->Roll }}
+        </div>
+        <div class="custom-font">
+            {{ $studentDetails->reg_id }}
+        </div>
+    </body>
 </html>

@@ -6,7 +6,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
-import Fazilat from '@/Pages/marhala/fazilat.vue';
+import Fazilat from '@/Pages/fazilat/fazilat.vue';
 
 const showingNavigationDropdown = ref(false);
 const sidebarOpen = ref(false);
@@ -78,11 +78,11 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.takmil" class="pl-6">
-                        <Link :href="route('marhala.fazilat')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link :href="route('takmil.takmil')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
 
                         <Link href="route('#')" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
 
-                        <Link :href="route('marhala.cirtificateProvide')" class="block px-4 py-2 hover:bg-gray-700">সনদ কার্যক্রম</Link>
+                        <Link :href="route('takmil.cirtificateProvide')" class="block px-4 py-2 hover:bg-gray-700">সনদ কার্যক্রম</Link>
 
                     </div>
                 </div>
@@ -109,11 +109,11 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.Fazilat" class="pl-6">
-                        <Link :href="route('marhala.fazilat')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link :href="route('fazilat.fazilat')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
 
                         <Link href="route('#')" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
 
-                        <Link :href="route('marhala.cirtificateProvide')" class="block px-4 py-2 hover:bg-gray-700">সনদ কার্যক্রম</Link>
+                        <Link :href="route('fazilat.cirtificateProvide')" class="block px-4 py-2 hover:bg-gray-700">সনদ কার্যক্রম</Link>
 
                     </div>
                 </div>
@@ -138,9 +138,9 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.orders" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link :href="route('sanawia.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
                         <Link href="#" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
-                        <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
+                        <Link :href="route('sanawia.sanawiacirtificateProvide')" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
                 </div>
 <!--
@@ -166,7 +166,7 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.sanawia" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="route('fazilat.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
                         <Link href="" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
                         <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
@@ -196,7 +196,7 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.mutawassita" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="route('fazilat.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
                         <Link href="" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
                         <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
@@ -226,7 +226,7 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.ibtedaia" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="route('fazilat.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
                         <Link href="" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
                         <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
@@ -255,7 +255,7 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.HifzulQuran" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="route('fazilat.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
                         <Link href="" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
                         <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
@@ -286,7 +286,7 @@ const openMessages = () => {
                         </svg>
                     </button>
                     <div v-if="dropdownOpen.Qirat" class="pl-6">
-                        <Link :href="route('marhala.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
+                        <Link href="route('fazilat.sanawaia')" class="block px-4 py-2 hover:bg-gray-700">সকল ছাত্র</Link>
                         <Link href="" class="block px-4 py-2 hover:bg-gray-700">আবেদন তালিকা</Link>
                         <Link href="#" class="block px-4 py-2 hover:bg-gray-700">সনদ কর্যক্রম</Link>
                     </div>
