@@ -68,7 +68,7 @@ watch(selectedYear, (newYear) => {
 
 const filterByYear = () => {
     router.get(
-        route('fazilat.fazilat'),
+        route('Fajilat.fazilat'),
         {
             year: selectedYear.value,
             SRType: selectedSRType.value, // Maintain SRType filter
@@ -89,7 +89,7 @@ const filterByYear = () => {
 };
 const filterBySRType = () => {
     router.get(
-        route('fazilat.fazilat'),
+        route('Fajilat.fazilat'),
         {
             SRType: selectedSRType.value,
             year: selectedYear.value, // Maintain year filter
@@ -115,7 +115,7 @@ const filterBySRType = () => {
 
 const filterBydivision = () => {
     router.get(
-        route('fazilat.fazilat'),
+        route('Fajilat.fazilat'),
         {
             SRType: selecteddivision.value,
             year: selecteddivision.value, // Maintain year filter
@@ -144,7 +144,7 @@ const pageInput = ref('')
 const goToPage = () => {
     if (pageInput.value >= 1 && pageInput.value <= students.value.last_page) {
         router.get(
-            route('fazilat.searchElhaq'),
+            route('Fajilat.searchElhaq'),
             {
                 page: pageInput.value,
                 year: selectedYear.value,
@@ -180,7 +180,7 @@ const searchStudent = () => {
         return;
     }
 
-    router.visit(route('fazilat.searchElhaq', {
+    router.visit(route('Fajilat.searchElhaq', {
         Elhaq: form.value.Elhaq,
         year: selectedYear.value
     }), {
@@ -514,7 +514,7 @@ onMounted(() => {
                     <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.madrasha ? student.madrasha.district : "N/A" }}</td>
                     <td class="px-6 py-4 text-md font-semibold whitespace-nowrap">{{ student.madrasha ? student.madrasha.Thana_uni : "N/A" }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <Link :href="route('fazilat.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })" class="text-blue-600 hover:text-blue-800 transition-colors duration-150 group">
+                        <Link :href="route('Fajilat.fazilatDetailes', { Roll: student.Roll, reg_id: student.reg_id })" class="text-blue-600 hover:text-blue-800 transition-colors duration-150 group">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform group-hover:scale-110 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                             </svg>

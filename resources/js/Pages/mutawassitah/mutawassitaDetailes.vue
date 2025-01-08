@@ -65,7 +65,7 @@ const getGrade = (marks) => {
 
 const updateProfile = () => {
     isLoading.value = true
-    router.put(route('fazilat.update'), studentDetails, {
+    router.put(route('Fajilat.update'), studentDetails, {
         preserveScroll: true,
         onSuccess: () => {
             isLoading.value = false
@@ -84,7 +84,7 @@ const updateProfile = () => {
 
 
 const downloadCertificate = () => {
-    window.location.href = route('fazilat.certificate.pdf', {
+    window.location.href = route('Fajilat.certificate.pdf', {
         Roll: studentDetails.Roll,
         reg_id: studentDetails.reg_id
     });
@@ -98,7 +98,7 @@ const downloadCertificate = () => {
 
 
     <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="min-h-screen bg-gray-50 py-12">
-        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('fazilat.fazilat'))">
+        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('Fajilat.fazilat'))">
     BACK
 </PrimaryButton>
 

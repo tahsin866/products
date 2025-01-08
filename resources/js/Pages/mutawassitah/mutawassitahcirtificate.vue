@@ -65,7 +65,7 @@ const searchArabicStudents = () => {
     arabicLoading.value = true;
 
 
-    router.get(route('fazilat.search'), arabicForm.value, {
+    router.get(route('mutawassitah.search'), arabicForm.value, {
         preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
@@ -109,7 +109,7 @@ const searchBengaliStudents = () => {
     bengaliLoading.value = true;
 
 
-    router.get(route('fazilat.searchBn'), bengaliForm.value, {
+    router.get(route('mutawassitah.searchBn'), bengaliForm.value, {
         preserveState: true,
         preserveScroll: true,
         onSuccess: () => {
@@ -248,7 +248,7 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
                                     <td class="px-6 py-4 whitespace-nowrap text-md font-semibold text-gray-700">{{
                                         student.Class }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <Link :href="route('fazilat.fazilatDetailes', {
+                                        <Link :href="route('mutawassitah.mutawassitaDetailes', {
                                             Roll: student.Roll,
                                             reg_id: student.reg_id
                                         })" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all duration-200 font-medium">
@@ -359,7 +359,7 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
                                         {{ student[field] }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <Link :href="route('fazilat.fazilatDetailes', {
+                                        <Link :href="route('mutawassitah.mutawassitaDetailes', {
                                             Roll: student.Roll,
                                             reg_id: student.reg_id
                                         })" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all duration-200 font-medium">
@@ -458,7 +458,7 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
                                         {{ student[field] }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <Link :href="route('fazilat.fazilatDetailes', {
+                                        <Link :href="route('mutawassitah.mutawassitaDetailes', {
                                             Roll: student.Roll,
                                             reg_id: student.reg_id
                                         })" class="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-800 transition-all duration-200 font-medium">
@@ -492,5 +492,4 @@ const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' 
 
     </AuthenticatedLayout>
 </template>
-<!-- v-if="activeTab === 'marhala' && bengaliStudentData.length > 0" -->
-<!-- v-if="activeTab === 'single' && arabicStudentData.length > 0" -->
+

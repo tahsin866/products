@@ -15,24 +15,24 @@ const studentDetails = props.studentDetails || {}
 const isLoading = ref(false)
 
 const maleSubjects = [
-    { name: 'شرح الوقاية ' },
-    { name: 'نور الأنوار' },
-    { name: 'مختصر المعاني' },
-    { name: 'مقامات الحريري' },
-    { name: 'ترجمة القرآن الكريم' },
-    { name: 'السراجي' },
-    { name: 'الطريق إلى الإنشاء جزء-3' },
-    // { name: 'تحريك دار العلوم ديوبند' }
+    { name: 'مشكوة المصابيح (الجزء الأول)' },
+    { name: 'تفسير البيضاوي' },
+    { name: 'شرح العقائد و الفرق الباطلة' },
+    { name: 'مشكوة المصابيح (الجزء الثاني)' },
+    { name: 'الهداية (الجزء الثالث)' },
+    { name: 'الهداية (الجزء الرابع)' },
+    { name: 'نزهة النظر في شرح نخبة الفكر' },
+    { name: 'تحريك دار العلوم ديوبند' }
 ]
 
 const femaleSubjects = [
-{ name: 'شرح الوقاية ' },
-    { name: 'نور الأنوار' },
-    { name: 'دروس البلاغة/مختصر المعاني' },
-    { name: 'مختارات/مقامات الحريري' },
-    { name: 'ترجمة القرآن الكريم' },
-    { name: 'الكافية' },
-    { name: 'الطريق إلى الإنشاء جزء-3' },
+    { name: 'مشكوة المصابيح (الجزء الأول)' },
+    { name: 'تفسيرجلالين (الجزء الأول)' },
+    { name: 'تفسيرجلالين (الجزء الثاني)' },
+    { name: 'مشكوة المصابيح (الجزء الثاني)' },
+    { name: 'الهداية (الجزء الثالث)' },
+    { name: 'الهداية (الجزء الرابع)' },
+    { name: 'عقيدة الطحاوي' }
 ]
 
 const currentSubjects = computed(() => {
@@ -65,7 +65,7 @@ const getGrade = (marks) => {
 
 const updateProfile = () => {
     isLoading.value = true
-    router.put(route('sanawia.update'), studentDetails, {
+    router.put(route('Fajilat.update'), studentDetails, {
         preserveScroll: true,
         onSuccess: () => {
             isLoading.value = false
@@ -84,7 +84,7 @@ const updateProfile = () => {
 
 
 const downloadCertificate = () => {
-    window.location.href = route('fazilat.certificate.pdf', {
+    window.location.href = route('Fajilat.certificate.pdf', {
         Roll: studentDetails.Roll,
         reg_id: studentDetails.reg_id
     });
@@ -98,7 +98,7 @@ const downloadCertificate = () => {
 
 
     <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="min-h-screen bg-gray-50 py-12">
-        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('marhala.fazilat'))">
+        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('Fajilat.certificate'))">
     BACK
 </PrimaryButton>
 

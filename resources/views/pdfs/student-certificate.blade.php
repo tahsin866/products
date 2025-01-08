@@ -5,19 +5,18 @@
         <meta charset="UTF-8">
         <title>Student Certificate</title>
         <style type="text/css">
-            body {
-                    margin: 0;
-                    font-size: 85%;
-                }
+            @font-face{
 
-                @font-face{
-                    font-family: "My-custom-font";
-                    src : url("solaimanLipi.ttf")
-                }
-                .custom-font{
-                    font: normal 20px/18px My-custom-font;
-                }
+                font-family: "SolaimanLipi";
+                src: url("SolaimanLipi.ttf")
+            }
 
+
+
+            .custom-font{
+
+                font:normal 12px /20px SolaimanLipi;
+            }
           </style>
     </head>
     <body>

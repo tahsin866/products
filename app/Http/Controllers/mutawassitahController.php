@@ -1,50 +1,47 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\student;
 use App\Models\students_number_potrro;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\student;
+
 use App\Models\Division;
 use App\Models\District;
 use App\Models\thana;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
-// use Barryvdh\DomPDF\Facade\Pdf;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Cache;
 
-use function Laravel\Prompts\search;
-use Illuminate\Support\Facades\View;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
 
 
-class fazilatController extends Controller
+class mutawassitahController extends Controller
 {
 
-
-    public function demo(Request $request)
+    public function Mutawassitah(Request $request)
     {
         // Cache distinct years for optimization
         $years = Cache::remember('distinct_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->pluck('years');
+            return student::select('years')->distinct()->pluck('years');
         });
 
 
         $division = Cache::remember('distinct_years', 60, function () {
-            return students_number_potrro::with('madrasha')->select('division')->distinct()->pluck('division');
+            return student::with('madrasha')->select('division')->distinct()->pluck('division');
         });
 
 
         $SRType = Cache::remember('distinct_SRType', 60, function () {
-            return students_number_potrro::select('SRType')->distinct()->pluck('SRType');
+            return student::select('SRType')->distinct()->pluck('SRType');
         });
 
         $totalCount = Cache::remember('total_count', 60, function () {
-            return students_number_potrro::where('CID', 2)->count();
+            return student::where('CID', 3)->count();
         });
 
 
 
-        $query = students_number_potrro::where('CID', 2);
+        $query = student::where('CID', 5);
 
         // Initialize counts
         $yearCount = 0;
@@ -52,7 +49,7 @@ class fazilatController extends Controller
         $femaleCount = 0;
 
         // Base query for counts
-        $countsQuery = students_number_potrro::where('CID', 2);
+        $countsQuery = student::where('CID', 5);
 
         // Apply year filter if selected
         if ($request->year) {
@@ -79,7 +76,7 @@ class fazilatController extends Controller
 
         $students = $query->with('madrasha')->paginate(15)->withQueryString();
 
-        return Inertia::render('Fajilat/fazilat', [
+        return Inertia::render('mutawassitah/Mutawassitah', [
             'students' => $students,
             'SRType' => $SRType,
             'years' => $years,
@@ -105,11 +102,11 @@ class fazilatController extends Controller
     public function searchElhaq(Request $request)
     {
         $request->validate([
-            'Elhaq' => 'nullable|string|max:255',
+            'MElhaq' => 'nullable|string|max:255',
             'year' => 'nullable|string'
         ]);
 
-        $query = students_number_potrro::query()->where('CID', 2);
+        $query = student::query()->where('CID', 5);
 
         // Apply year filter if selected
         if ($request->filled('year')) {
@@ -117,8 +114,8 @@ class fazilatController extends Controller
         }
 
         // Apply Elhaq filter
-        if ($request->filled('Elhaq')) {
-            $query->where('Elhaq', $request->Elhaq);
+        if ($request->filled('MElhaq')) {
+            $query->where('MElhaq', $request->MElhaq);
         }
 
         // Clone query before pagination for counts
@@ -134,13 +131,13 @@ class fazilatController extends Controller
             SUM(CASE WHEN SRType = 0 THEN 1 ELSE 0 END) as female
         ')->first();
 
-        return Inertia::render('Fajilat/fazilat', [
+        return Inertia::render('mutawassitah/Mutawassitah', [
             'students' => $searchResults,
             'yearCount' => $counts->total ?? 0,
             'maleCount' => $counts->male ?? 0,
             'femaleCount' => $counts->female ?? 0,
             'filters' => [
-                'Elhaq' => $request->Elhaq,
+                'MElhaq' => $request->MElhaq,
                 'year' => $request->year
             ]
         ]);
@@ -176,12 +173,12 @@ class fazilatController extends Controller
 
     public function details($Roll, $reg_id)
     {
-        $details = students_number_potrro::where('CID', 2)
+        $details = student::where('CID', 5)
             ->where('Roll', $Roll)
             ->where('reg_id', $reg_id)
             ->firstOrFail();
 
-        return inertia::render('Fajilat/fazilatDetailes', [
+        return inertia::render('mutawassitah/mutawassitaDetailes', [
             'studentDetails' => $details,
         ]);
     }
@@ -194,7 +191,7 @@ class fazilatController extends Controller
             'reg_id' => 'required',
         ]);
 
-        students_number_potrro::where('Roll', $request->Roll)
+        student::where('Roll', $request->Roll)
             ->where('reg_id', $request->reg_id)
             ->update($request->except(['_token']));
 
@@ -203,17 +200,17 @@ class fazilatController extends Controller
 
 
 
-    public function cirtificateProvide()
+    public function sanawiacirtificateProvide()
     {
         $arabicYears = Cache::remember('arabic_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->get();
+            return student::select('years')->distinct()->get();
         });
 
         $bengaliYears = Cache::remember('bengali_years', 60, function () {
             return student::select('years')->distinct()->get();
         });
 
-        return Inertia::render('Fajilat/cirtificateProvide', [
+        return Inertia::render('mutawassitah/mutawassitahcirtificate', [
             'arabicYears' => $arabicYears,
             'bengaliYears' => $bengaliYears,
             'arabicStudentData' => [],
@@ -224,7 +221,7 @@ class fazilatController extends Controller
     public function search(Request $request)
     {
         $arabicYears = Cache::remember('arabic_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->get();
+            return student::select('years')->distinct()->get();
         });
 
         $bengaliYears = Cache::remember('bengali_years', 60, function () {
@@ -232,21 +229,21 @@ class fazilatController extends Controller
         });
 
         if (!$request->filled(['year', 'Roll', 'reg_id'])) {
-            return Inertia::render('Fajilat/cirtificateProvide', [
+            return Inertia::render('mutawassitah/mutawassitahcirtificate', [
                 'arabicYears' => $arabicYears,
                 'bengaliYears' => $bengaliYears,
                 'arabicStudentData' => []
             ]);
         }
 
-        $arabicStudentData = students_number_potrro::where([
+        $arabicStudentData = student::where([
             ['years', $request->year],
             ['Roll', $request->Roll],
             ['reg_id', $request->reg_id],
             ['CID', 2]
         ])->get();
 
-        return Inertia::render('Fajilat/cirtificateProvide', [
+        return Inertia::render('mutawassitah/mutawassitahcirtificate', [
             'arabicYears' => $arabicYears,
             'bengaliYears' => $bengaliYears,
             'arabicStudentData' => $arabicStudentData
@@ -256,7 +253,7 @@ class fazilatController extends Controller
     public function searchBn(Request $request)
     {
         $arabicYears = Cache::remember('arabic_years', 60, function () {
-            return students_number_potrro::select('years')->distinct()->get();
+            return student::select('years')->distinct()->get();
         });
 
         $bengaliYears = Cache::remember('bengali_years', 60, function () {
@@ -264,7 +261,7 @@ class fazilatController extends Controller
         });
 
         if (!$request->filled(['year', 'Roll', 'reg_id'])) {
-            return Inertia::render('Fajilat/cirtificateProvide', [
+            return Inertia::render('mutawassitah/mutawassitahcirtificate', [
                 'arabicYears' => $arabicYears,
                 'bengaliYears' => $bengaliYears,
                 'bengaliStudentData' => []
@@ -278,7 +275,7 @@ class fazilatController extends Controller
             ['CID', 2]
         ])->get();
 
-        return Inertia::render('Fajilat/cirtificateProvide', [
+        return Inertia::render('mutawassitah/mutawassitahcirtificate', [
             'arabicYears' => $arabicYears,
             'bengaliYears' => $bengaliYears,
             'bengaliStudentData' => $bengaliStudentData
@@ -290,68 +287,38 @@ class fazilatController extends Controller
 
 
 
-    // public function generatePdf($Roll, $reg_id)
-    // {
-
-
-
-    //     $details = students_number_potrro::where('CID', 2)
-    //         ->where('Roll', $Roll)
-    //         ->where('reg_id', $reg_id)
-    //         ->firstOrFail();
-
-    //     $pdf = PDF::loadView('pdfs.student-certificate', [
-    //         'studentDetails' => $details,
-    //     ])
-    //         ->setPaper('A4')
-    //         ->set_option('isHtml5ParserEnabled', true)
-    //         ->set_option('isPhpEnabled', true);
-
-    //     $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
-
-    //     return $pdf->download($fileName);
-    // }
-
-
     public function generatePdf($Roll, $reg_id)
     {
-        $details = students_number_potrro::where('CID', 2)
+
+
+
+        $details = student::where('CID', 5)
             ->where('Roll', $Roll)
             ->where('reg_id', $reg_id)
             ->firstOrFail();
 
-        $mpdf = new Mpdf([
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => 0,
-            'margin_footer' => 0,
-            'margin_left' => 15,
-            'margin_right' => 15,
-            'tempDir' => storage_path('app/mpdf'),
-            'default_font' => 'bangla'
-        ]);
-
-        // Load custom Bengali font if needed
-        $mpdf->useAdobeCJK = true;
-        $mpdf->autoScriptToLang = true;
-        $mpdf->autoLangToFont = true;
-
-        $htmlContent = View::make('pdfs.student-certificate', [
+        $pdf = PDF::loadView('pdfs.student-certificate', [
             'studentDetails' => $details,
-        ])->render();
-
-        $mpdf->WriteHTML($htmlContent);
+        ])
+            ->setPaper('A4')
+            ->set_option('isHtml5ParserEnabled', true)
+            ->set_option('isPhpEnabled', true);
 
         $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
 
-        return response()->streamDownload(
-            function() use ($mpdf) {
-                echo $mpdf->Output('', 'S');
-            },
-            $fileName,
-            ['Content-Type' => 'application/pdf']
-        );
+        return $pdf->download($fileName);
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

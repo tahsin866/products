@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\fazilatController;
+use App\Http\Controllers\mutawassitahController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\porductController;
 use App\Http\Controllers\sanawiaController;
+use App\Http\Controllers\takmilController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,15 +50,15 @@ Route::middleware('auth')->group(function () {
 // takmil
 
 
-Route::get('/takmil/takmil', [sanawiaController::class, 'takmil'])->name('takmil.takmil');
-Route::get('/takmil/sanawaiaDetailes/{Roll}/{reg_id}', [sanawiaController::class, 'details'])->name('takmil.sanawaiaDetailes');
+Route::get('/Takmil/takmil', [takmilController::class, 'takmil'])->name('Takmil.takmil');
+Route::get('/Takmil/sanawaiaDetailes/{Roll}/{reg_id}', [takmilController::class, 'details'])->name('Takmil.sanawaiaDetailes');
 
-Route::put('/takmil/update', [sanawiaController::class, 'update'])->name('takmil.update');
-Route::get('/takmil/sanawiacirtificateProvide', [sanawiaController::class, 'sanawiacirtificateProvide'])->name('takmil.sanawiacirtificateProvide');
-Route::get('/takmil/search', [sanawiaController::class, 'search'])->name('takmil.search');
-Route::get('/takmil/searchBn', [sanawiaController::class, 'searchBn'])->name('takmil.searchBn');
-Route::get('/takmil/searchElhaq', [sanawiaController::class, 'searchElhaq'])->name('takmil.searchElhaq');
-Route::get('/takmil/certificate/{Roll}/{reg_id}', [sanawiaController::class, 'generatePdf'])->name('takmil.certificate.pdf');
+Route::put('/Takmil/update', [takmilController::class, 'update'])->name('Takmil.update');
+Route::get('/Takmil/sanawiacirtificateProvide', [takmilController::class, 'sanawiacirtificateProvide'])->name('Takmil.sanawiacirtificateProvide');
+Route::get('/Takmil/search', [takmilController::class, 'search'])->name('Takmil.search');
+Route::get('/Takmil/searchBn', [takmilController::class, 'searchBn'])->name('Takmil.searchBn');
+Route::get('/Takmil/searchElhaq', [takmilController::class, 'searchElhaq'])->name('Takmil.searchElhaq');
+Route::get('/Takmil/certificate/{Roll}/{reg_id}', [takmilController::class, 'generatePdf'])->name('Takmil.certificate.pdf');
 
 
 
@@ -71,14 +73,14 @@ Route::get('/takmil/certificate/{Roll}/{reg_id}', [sanawiaController::class, 'ge
 
 // fazilat
 
-Route::get('/fazilat/fazilat', [fazilatController::class, 'demo'])->name('fazilat.fazilat');
-Route::get('/fazilat/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('fazilat.fazilatDetailes');
-Route::put('/fazilat/update', [fazilatController::class, 'update'])->name('fazilat.update');
-Route::get('/fazilat/cirtificateProvide', [FazilatController::class, 'cirtificateProvide'])->name('fazilat.cirtificateProvide');
-Route::get('/fazilat/search', [fazilatController::class, 'search'])->name('fazilat.search');
-Route::get('/fazilat/searchBn', [fazilatController::class, 'searchBn'])->name('fazilat.searchBn');
-Route::get('/fazilat/searchElhaq', [fazilatController::class, 'searchElhaq'])->name('fazilat.searchElhaq');
-Route::get('/fazilat/certificate/{Roll}/{reg_id}', [fazilatController::class, 'generatePdf'])->name('fazilat.certificate.pdf');
+Route::get('/Fajilat/fazilat', [fazilatController::class, 'demo'])->name('Fajilat.fazilat');
+Route::get('/Fajilat/fazilatDetailes/{Roll}/{reg_id}', [fazilatController::class, 'details'])->name('Fajilat.fazilatDetailes');
+Route::put('/Fajilat/update', [fazilatController::class, 'update'])->name('Fajilat.update');
+Route::get('/Fajilat/cirtificateProvide', [FazilatController::class, 'cirtificateProvide'])->name('Fajilat.cirtificateProvide');
+Route::get('/Fajilat/search', [fazilatController::class, 'search'])->name('Fajilat.search');
+Route::get('/Fajilat/searchBn', [fazilatController::class, 'searchBn'])->name('Fajilat.searchBn');
+Route::get('/Fajilat/searchElhaq', [fazilatController::class, 'searchElhaq'])->name('Fajilat.searchElhaq');
+Route::get('/Fajilat/certificate/{Roll}/{reg_id}', [fazilatController::class, 'generatePdf'])->name('Fajilat.certificate.pdf');
 
 
 Route::get('/applicationForm', function () {
@@ -98,6 +100,18 @@ Route::get('/sanawia/searchBn', [sanawiaController::class, 'searchBn'])->name('s
 Route::get('/sanawia/searchElhaq', [sanawiaController::class, 'searchElhaq'])->name('sanawia.searchElhaq');
 Route::get('/fazilat/certificate/{Roll}/{reg_id}', [sanawiaController::class, 'generatePdf'])->name('fazilat.certificate.pdf');
 
+
+// mutawassitah
+
+Route::get('/mutawassitah/Mutawassitah', [mutawassitahController::class, 'Mutawassitah'])->name('mutawassitah.Mutawassitah');
+Route::get('/mutawassitah/mutawassitaDetailes/{Roll}/{reg_id}', [mutawassitahController::class, 'details'])->name('mutawassitah.mutawassitaDetailes');
+
+Route::put('/mutawassitah/update', [mutawassitahController::class, 'update'])->name('mutawassitah.update');
+Route::get('/mutawassitah/mutawassitahcirtificate', [mutawassitahController::class, 'mutawassitahcirtificate'])->name('mutawassitah.mutawassitahcirtificate');
+Route::get('/mutawassitah/search', [mutawassitahController::class, 'search'])->name('mutawassitah.search');
+Route::get('/mutawassitah/searchBn', [mutawassitahController::class, 'searchBn'])->name('mutawassitah.searchBn');
+Route::get('/mutawassitah/searchElhaq', [mutawassitahController::class, 'searchElhaq'])->name('mutawassitah.searchElhaq');
+Route::get('/mutawassitah/certificate/{Roll}/{reg_id}', [mutawassitahController::class, 'generatePdf'])->name('mutawassitah.certificate.pdf');
 
 
 
