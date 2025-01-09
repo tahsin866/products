@@ -9,12 +9,12 @@ use App\Models\District;
 use App\Models\thana;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-// use Barryvdh\DomPDF\Facade\Pdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Cache;
 
 use function Laravel\Prompts\search;
 use Illuminate\Support\Facades\View;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
+// use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
 
 
 class fazilatController extends Controller
@@ -290,68 +290,68 @@ class fazilatController extends Controller
 
 
 
-    // public function generatePdf($Roll, $reg_id)
-    // {
-
-
-
-    //     $details = students_number_potrro::where('CID', 2)
-    //         ->where('Roll', $Roll)
-    //         ->where('reg_id', $reg_id)
-    //         ->firstOrFail();
-
-    //     $pdf = PDF::loadView('pdfs.student-certificate', [
-    //         'studentDetails' => $details,
-    //     ])
-    //         ->setPaper('A4')
-    //         ->set_option('isHtml5ParserEnabled', true)
-    //         ->set_option('isPhpEnabled', true);
-
-    //     $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
-
-    //     return $pdf->download($fileName);
-    // }
-
-
     public function generatePdf($Roll, $reg_id)
     {
+
+
+
         $details = students_number_potrro::where('CID', 2)
             ->where('Roll', $Roll)
             ->where('reg_id', $reg_id)
             ->firstOrFail();
 
-        $mpdf = new Mpdf([
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'margin_header' => 0,
-            'margin_footer' => 0,
-            'margin_left' => 15,
-            'margin_right' => 15,
-            'tempDir' => storage_path('app/mpdf'),
-            'default_font' => 'bangla'
-        ]);
-
-        // Load custom Bengali font if needed
-        $mpdf->useAdobeCJK = true;
-        $mpdf->autoScriptToLang = true;
-        $mpdf->autoLangToFont = true;
-
-        $htmlContent = View::make('pdfs.student-certificate', [
+        $pdf = PDF::loadView('pdfs.student-certificate', [
             'studentDetails' => $details,
-        ])->render();
-
-        $mpdf->WriteHTML($htmlContent);
+        ])
+            ->setPaper('A4')
+            ->set_option('isHtml5ParserEnabled', true)
+            ->set_option('isPhpEnabled', true);
 
         $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
 
-        return response()->streamDownload(
-            function() use ($mpdf) {
-                echo $mpdf->Output('', 'S');
-            },
-            $fileName,
-            ['Content-Type' => 'application/pdf']
-        );
+        return $pdf->download($fileName);
     }
+
+
+    // public function generatePdf($Roll, $reg_id)
+    // {
+    //     $details = students_number_potrro::where('CID', 2)
+    //         ->where('Roll', $Roll)
+    //         ->where('reg_id', $reg_id)
+    //         ->firstOrFail();
+
+    //     $mpdf = new Mpdf([
+    //         'mode' => 'utf-8',
+    //         'format' => 'A4',
+    //         'margin_header' => 0,
+    //         'margin_footer' => 0,
+    //         'margin_left' => 15,
+    //         'margin_right' => 15,
+    //         'tempDir' => storage_path('app/mpdf'),
+    //         'default_font' => 'bangla'
+    //     ]);
+
+    //     // Load custom Bengali font if needed
+    //     $mpdf->useAdobeCJK = true;
+    //     $mpdf->autoScriptToLang = true;
+    //     $mpdf->autoLangToFont = true;
+
+    //     $htmlContent = View::make('pdfs.student-certificate', [
+    //         'studentDetails' => $details,
+    //     ])->render();
+
+    //     $mpdf->WriteHTML($htmlContent);
+
+    //     $fileName = "certificate_{$Roll}_{$reg_id}.pdf";
+
+    //     return response()->streamDownload(
+    //         function() use ($mpdf) {
+    //             echo $mpdf->Output('', 'S');
+    //         },
+    //         $fileName,
+    //         ['Content-Type' => 'application/pdf']
+    //     );
+    // }
 
 
 
