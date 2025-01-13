@@ -1,197 +1,191 @@
 <template>
-
-    <div>
-    <CertificateAgreement v-if="!showApplicationForm" @proceed="showApplicationForm = true" />
-    <div v-else>
-      <!-- Your existing application form template -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Search Form -->
-      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Certificate Search</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <!-- Year Dropdown -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Academic Year
-            </label>
-            <select
-              v-model="searchParams.year"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+    <AuthenticatedLayout>
+      <div class="mx-auto p-6">
+        <!-- Language Switcher -->
+        <div class="mb-6 flex justify-end">
+          <div class="bg-white rounded-lg shadow-sm inline-flex">
+            <button
+              v-for="lang in ['bn', 'en']"
+              :key="lang"
+              @click="currentLanguage = lang"
+              :class="[
+                'px-4 py-2 text-sm font-medium',
+                currentLanguage === lang
+                  ? 'bg-indigo-500 text-white'
+                  : 'text-gray-600 hover:bg-gray-50'
+              ]"
             >
-              <option value="">Select Year</option>
-              <option v-for="year in years" :key="year" :value="year">
-                {{ year }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Class Dropdown -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Class
-            </label>
-            <select
-              v-model="searchParams.class"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            >
-              <option value="">Select Class</option>
-              <option v-for="className in classes" :key="className" :value="className">
-                {{ className }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Roll Number Input -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Roll Number
-            </label>
-            <input
-              type="number"
-              v-model="searchParams.roll"
-              placeholder="Enter roll number"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
-          </div>
-
-          <!-- Registration ID Input -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Registration ID
-            </label>
-            <input
-              type="number"
-              v-model="searchParams.regId"
-              placeholder="Enter registration ID"
-              class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+              {{ lang === 'bn' ? 'বাংলা' : 'English' }}
+            </button>
           </div>
         </div>
 
-        <!-- Search Button -->
-        <div class="mt-6 flex justify-end">
-          <button
-            @click="searchCertificates"
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            Search
-          </button>
+        <!-- Search Tabs -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+          <nav class="flex divide-x divide-gray-200">
+            <button
+              v-for="tab in tabs"
+              :key="tab.id"
+              @click="activeTab = tab.id"
+              :class="[
+                'flex-1 px-6 py-4 text-lg font-medium transition-all duration-200',
+                activeTab === tab.id
+                  ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-500'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              ]"
+            >
+              {{ currentLanguage === 'bn' ? tab.labelBn : tab.labelEn }}
+            </button>
+          </nav>
         </div>
-      </div>
 
-      <!-- Results Table -->
-      <div v-if="searchResults.length" class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Student Name
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Roll Number
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Registration ID
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Class
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Year
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="result in searchResults" :key="result.id">
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {{ result.studentName }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ result.rollNumber }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ result.registrationId }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ result.class }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ result.year }}
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="{
-                  'px-2 py-1 text-xs font-medium rounded-full': true,
-                  'bg-green-100 text-green-800': result.status === 'Approved',
-                  'bg-yellow-100 text-yellow-800': result.status === 'Pending',
-                  'bg-red-100 text-red-800': result.status === 'Rejected'
-                }">
-                  {{ result.status }}
+        <!-- Search Form -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+          <h2 class="text-2xl font-bold mb-8">
+            {{ currentLanguage === 'bn' ? searchTitles[activeTab].bn : searchTitles[activeTab].en }}
+          </h2>
+
+          <form @submit.prevent="handleSearch" class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Year Selection -->
+            <div class="space-y-2">
+              <label class="block text-md font-semibold text-gray-700">
+                {{ currentLanguage === 'bn' ? 'বছর নির্বাচন করুন' : 'Select Year' }}
+              </label>
+              <select v-model="searchForm.year" class="form-select">
+                <option value="">{{ currentLanguage === 'bn' ? 'বছর নির্বাচন করুন' : 'Select year' }}</option>
+                <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+              </select>
+            </div>
+
+            <!-- Roll Number -->
+            <div class="space-y-2">
+              <label class="block text-md font-semibold text-gray-700">
+                {{ currentLanguage === 'bn' ? 'রোল নম্বর' : 'Roll Number' }}
+              </label>
+              <input
+                v-model="searchForm.roll"
+                type="text"
+                class="form-input"
+                :placeholder="currentLanguage === 'bn' ? 'রোল নম্বর লিখুন' : 'Enter roll number'"
+              >
+            </div>
+
+            <!-- Registration ID -->
+            <div class="space-y-2">
+              <label class="block text-md font-semibold text-gray-700">
+                {{ currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি' : 'Registration ID' }}
+              </label>
+              <input
+                v-model="searchForm.regId"
+                type="text"
+                class="form-input"
+                :placeholder="currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি লিখুন' : 'Enter registration ID'"
+              >
+            </div>
+
+            <!-- Search Button -->
+            <div class="flex items-end">
+              <button
+                type="submit"
+                :disabled="isLoading"
+                class="w-full btn-primary"
+              >
+                <span v-if="isLoading" class="flex items-center justify-center">
+                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                  {{ currentLanguage === 'bn' ? 'অনুসন্ধান করা হচ্ছে...' : 'Searching...' }}
                 </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                <button class="text-indigo-600 hover:text-indigo-900">View Details</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <span v-else>
+                  {{ currentLanguage === 'bn' ? 'অনুসন্ধান করুন' : 'Search' }}
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Results Table -->
+        <div v-if="searchResults.length > 0" class="mt-6 bg-white rounded-xl shadow-lg overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <h3 class="text-xl font-bold text-gray-800">
+              {{ currentLanguage === 'bn' ? 'অনুসন্ধানের ফলাফল' : 'Search Results' }}
+            </h3>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <!-- Table headers and content here -->
+            </table>
+          </div>
+        </div>
       </div>
-    </div>
-    </div>
-  </div>
-
-
-
+    </AuthenticatedLayout>
   </template>
 
   <script setup>
   import { ref, reactive } from 'vue'
-  import CertificateAgreement from './CertificateAgreement.vue'
+  import { Head, Link } from '@inertiajs/vue3'
+  import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
-const showApplicationForm = ref(false)
+  const currentLanguage = ref('bn')
+  const activeTab = ref('certificate')
+  const isLoading = ref(false)
 
+  const tabs = [
+    { id: 'certificate', labelBn: 'সনদপত্র', labelEn: 'Certificate' },
+    { id: 'transcript', labelBn: 'ট্রান্সক্রিপ্ট', labelEn: 'Transcript' },
+    { id: 'provisional', labelBn: 'সাময়িক সনদ', labelEn: 'Provisional' }
+  ]
 
-  // Sample data for dropdowns
-  const years = ref([2023, 2022, 2021, 2020, 2019])
-  const classes = ref(['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'])
+  const searchTitles = {
+    certificate: { bn: 'সনদপত্র অনুসন্ধান', en: 'Certificate Search' },
+    transcript: { bn: 'ট্রান্সক্রিপ্ট অনুসন্ধান', en: 'Transcript Search' },
+    provisional: { bn: 'সাময়িক সনদ অনুসন্ধান', en: 'Provisional Certificate Search' }
+  }
 
-  // Search parameters
-  const searchParams = reactive({
+  const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i)
+
+  const searchForm = reactive({
     year: '',
-    class: '',
     roll: '',
     regId: ''
   })
 
-  // Sample search results
   const searchResults = ref([])
 
-  const searchCertificates = () => {
+  const handleSearch = async () => {
+    isLoading.value = true
+
     // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500))
+
+    // Dummy results
     searchResults.value = [
       {
         id: 1,
-        studentName: 'John Doe',
-        rollNumber: '12345',
-        registrationId: 'REG001',
-        class: 'Class 5',
-        year: '2023',
+        nameEn: 'John Doe',
+        nameBn: 'জন ডো',
+        roll: '12345',
+        regId: 'REG001',
         status: 'Approved'
       },
-      // Add more sample results as needed
+      // Add more dummy results
     ]
+
+    isLoading.value = false
   }
   </script>
 
   <style scoped>
-  /* Add any additional custom styles here */
+  .form-select,
+  .form-input {
+    @apply w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500;
+  }
+
+  .btn-primary {
+    @apply bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700
+           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+           font-semibold shadow-md hover:shadow-lg;
+  }
   </style>

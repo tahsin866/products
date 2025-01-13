@@ -4,6 +4,7 @@ use App\Http\Controllers\fazilatController;
 use App\Http\Controllers\mutawassitahController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CertificateApplicationController;
+use App\Http\Controllers\englishApllyController;
 use App\Http\Controllers\porductController;
 use App\Http\Controllers\sanawiaController;
 use App\Http\Controllers\takmilController;
@@ -127,6 +128,11 @@ Route::get('/mutawassitah/certificate/{Roll}/{reg_id}', [mutawassitahController:
 Route::middleware(['auth'])->group(function () {
     Route::resource('applications', CertificateApplicationController::class);
 });
+
+Route::get('/applicationForm', [englishApllyController::class, 'search'])->name('applicationForm');
+
+
+
 
 
 // Route::get('/fazilat/Division', [fazilatController::class, 'index'])->name('marhala.Division');

@@ -1,5 +1,9 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div
+
+    style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+
+    class="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-10">
         <h2 class="text-2xl font-bold mb-6">সনদ সংক্রান্ত গুরুত্বপূর্ণ তথ্য</h2>
 
@@ -23,6 +27,7 @@
             <ul class="list-disc list-inside">
               <li>মূল সনদের জন্য কোন ফি নেই</li>
               <li>সাময়িক সনদ, সংশোধনী সনদ, ডুপ্লিকেট সনদ: ১০০ টাকা</li>
+
             </ul>
           </div>
 
@@ -43,7 +48,7 @@
               :disabled="!agreed"
               class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              আবেদন ফরম পূরণ করুন
+          এগিয়ে যাই
             </button>
           </div>
         </div>

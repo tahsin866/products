@@ -5,7 +5,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-
+const arabicLoading = ref(false);
+const bengaliLoading = ref(false);
+const activeTab = ref('single');
 
 
 
@@ -40,8 +42,6 @@ const bengaliForm = ref({
 
 
 
-const arabicLoading = ref(false);
-const bengaliLoading = ref(false);
 
 
 
@@ -126,7 +126,7 @@ const searchBengaliStudents = () => {
 
 
 // Add new ref for active tab
-const activeTab = ref('single'); // 'single' for একক সনদ, 'marhala' for মারহালাওয়ারী সনদ
+ // 'single' for একক সনদ, 'marhala' for মারহালাওয়ারী সনদ
 
 
 

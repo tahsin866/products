@@ -1,300 +1,188 @@
 <template>
 
 
-    <div>
-        <CertificateAgreement v-if="!showApplicationForm" @proceed="showApplicationForm = true" />
-        <div v-else>
-          <!-- Your existing application form template -->
-          <div class="max-w-4xl mx-auto mb-6 mt-5">
-      <!-- Status Banner -->
-      <div v-if="applicationStatus"
-           :class="{
-             'bg-yellow-50 border-yellow-400 text-yellow-800': applicationStatus === 'pending',
-             'bg-red-50 border-red-400 text-red-800': applicationStatus === 'rejected',
-             'bg-green-50 border-green-400 text-green-800': applicationStatus === 'approved',
-             'bg-gray-50 border-gray-400 text-gray-800': applicationStatus === 'cancelled'
-           }"
-           class="rounded-md border-l-4 p-4 mb-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <!-- Status Icon -->
-              <svg v-if="applicationStatus === 'pending'" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-              </svg>
-              <svg v-if="applicationStatus === 'approved'" class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-              </svg>
-              <!-- Add other status icons as needed -->
-            </div>
-            <div v-if="applicationStatus"
-             :class="{
-               'bg-yellow-50 border-yellow-400 text-yellow-800': applicationStatus === 'pending',
-               'bg-red-50 border-red-400 text-red-800': applicationStatus === 'rejected',
-               'bg-green-50 border-green-400 text-green-800': applicationStatus === 'approved',
-               'bg-gray-50 border-gray-400 text-gray-800': applicationStatus === 'cancelled'
-             }"
-             class="rounded-md border-l-4 p-4 mb-4">
-          <!-- Rest of your status banner code -->
-        </div>
-          </div>
-          <!-- Status Timeline -->
-          <div class="ml-4">
-            <div class="flex items-center space-x-2 text-sm">
-              <span class="font-medium">Last Updated:</span>
-              <span>{{ lastUpdated }}</span>
-            </div>
+    <div  class="max-w-7xl mx-auto"
+
+
+    style="font-family: 'Merriweather','SolaimanLipi',sans-serif;">
+    <CertificateAgreement v-if="!showApplicationForm" @proceed="showApplicationForm = true" />
+
+
+    <div v-else>
+        <div class="mx-auto p-6">
+        <!-- Language Switcher -->
+        <div class="mb-6 flex justify-end">
+          <div class="bg-white rounded-lg shadow-sm inline-flex">
+            <button
+              v-for="lang in ['bn', 'en']"
+              :key="lang"
+              @click="currentLanguage = lang"
+              :class="[
+                'px-4 py-2 text-sm font-medium',
+                currentLanguage === lang
+                  ? 'bg-indigo-500 text-white'
+                  : 'text-gray-600 hover:bg-gray-50'
+              ]"
+            >
+              {{ lang === 'bn' ? 'বাংলা' : 'English' }}
+            </button>
           </div>
         </div>
+
+        <!-- Search Tabs -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+          <nav class="flex divide-x divide-gray-200">
+            <button
+              v-for="tab in tabs"
+              :key="tab.id"
+              @click="activeTab = tab.id"
+              :class="[
+                'flex-1 px-6 py-4 text-lg font-medium transition-all duration-200',
+                activeTab === tab.id
+                  ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-500'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              ]"
+            >
+              {{ currentLanguage === 'bn' ? tab.labelBn : tab.labelEn }}
+            </button>
+          </nav>
+        </div>
+
+        <!-- Search Form -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+          <h2 class="text-2xl font-bold mb-8">
+            {{ currentLanguage === 'bn' ? searchTitles[activeTab].bn : searchTitles[activeTab].en }}
+          </h2>
+
+          <form @submit.prevent="handleSearch" class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Year Selection -->
+            <div class="space-y-2">
+              <label class="block text-md font-semibold text-gray-700">
+                {{ currentLanguage === 'bn' ? 'বছর নির্বাচন করুন' : 'Select Year' }}
+              </label>
+              <select v-model="searchForm.year" class="form-select">
+                <option value="">{{ currentLanguage === 'bn' ? 'বছর নির্বাচন করুন' : 'Select year' }}</option>
+                <option v-for="years in years" :key="years" :value="years">{{ years }}</option>
+              </select>
+            </div>
+
+            <!-- Roll Number -->
+            <div class="space-y-2">
+              <label class="block text-md font-semibold text-gray-700">
+                {{ currentLanguage === 'bn' ? 'রোল নম্বর' : 'Roll Number' }}
+              </label>
+              <input
+                v-model="searchForm.Roll"
+                type="text"
+                class="form-input"
+                :placeholder="currentLanguage === 'bn' ? 'রোল নম্বর লিখুন' : 'Enter roll number'"
+              >
+            </div>
+
+            <!-- Registration ID -->
+            <div class="space-y-2">
+              <label class="block text-md font-semibold text-gray-700">
+                {{ currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি' : 'Registration ID' }}
+              </label>
+              <input
+                v-model="searchForm.reg_id"
+                type="text"
+                class="form-input"
+                :placeholder="currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি লিখুন' : 'Enter registration ID'"
+              >
+            </div>
+
+            <!-- Search Button -->
+            <div class="flex items-end">
+              <button
+                type="submit"
+                :disabled="isLoading"
+                class="w-full btn-primary"
+              >
+                <span v-if="isLoading" class="flex items-center justify-center">
+                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                  {{ currentLanguage === 'bn' ? 'অনুসন্ধান করা হচ্ছে...' : 'Searching...' }}
+                </span>
+                <span v-else>
+                  {{ currentLanguage === 'bn' ? 'অনুসন্ধান করুন' : 'Search' }}
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Results Table -->
+        <div v-if="props.searchResults && props.searchResults.length > 0"
+     class="mt-6 bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="p-6 border-b border-gray-200">
+        <h3 class="text-xl font-bold text-gray-800">
+            {{ currentLanguage === 'bn' ? 'অনুসন্ধানের ফলাফল' : 'Search Results' }}
+        </h3>
+    </div>
+
+    <!-- Certificate Table -->
+    <div v-if="activeTab === 'certificate'" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'নাম' : 'Name' }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'পিতার নাম' : 'Father Name' }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'নাম' : 'Name' }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'বছর' : 'Years' }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'রোল' : 'Roll' }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি' : 'Registration ID' }}
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                        {{ currentLanguage === 'bn' ? 'অবস্থা' : 'Status' }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr v-for="result in props.searchResults" :key="result.id">
+                    <td class="px-6 py-4">{{ result.Name }}</td>
+                    <td class="px-6 py-4">{{ result.Father }}</td>
+                    <td class="px-6 py-4">{{ result.Name }}</td>
+                    <td class="px-6 py-4">{{ result.years }}</td>
+                    <td class="px-6 py-4">{{ result.Roll }}</td>
+                    <td class="px-6 py-4">{{ result.reg_id }}</td>
+                    <td class="px-6 py-4">
+                        <!-- <span :class="[
+                            'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                            result.status === 'Approved' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                        ]">
+                            {{ result.status }}
+                        </span> -->
+
+                        <Link :href="route('Fajilat.fazilatDetailes', { Roll: result.Roll, reg_id: result.reg_id })" class="text-blue-600 hover:text-blue-800 transition-colors duration-150 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 transform group-hover:scale-110 transition-all duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                        </Link>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
       </div>
     </div>
 
+   </div>
 
-        <div class="min-h-screen bg-gradient-to-b from-blue-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-          <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-10">
-            <div class="border-b pb-6 mb-8">
-              <h2 class="text-4xl font-extrabold text-gray-900">Certificate Application Form</h2>
-              <p class="mt-3 text-lg text-gray-600">
-                Please fill in all required fields marked with an asterisk (<span class="text-red-500">*</span>).
-              </p>
-            </div>
-
-            <form @submit.prevent="submit" class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-10">
-              <!-- Certificate Type Section -->
-              <section>
-        <!-- Certificate Type Dropdown -->
-        <div>
-          <label for="certificateType" class="block text-sm font-medium text-gray-700">
-            Certificate Type <span class="text-red-500">*</span>
-          </label>
-          <select
-            id="certificateType"
-            v-model="formData.Certificate_Type"
-            class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          >
-            <option value="" disabled>Select a certificate type</option>
-            <option v-for="type in certificateTypes" :key="type" :value="type">{{ type }}</option>
-          </select>
-          <span v-if="errors.Certificate_Type" class="text-red-500 text-sm">{{ errors.Certificate_Type[0] }}</span>
-        </div>
-
-        <!-- Class Name Dropdown -->
-        <div class="mt-5">
-          <label for="className" class="block text-sm font-medium text-gray-700">
-            Class Name <span class="text-red-500">*</span>
-          </label>
-          <select
-            id="className"
-            v-model="formData.Class_name"
-            class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            required
-          >
-            <option value="" disabled>Select a class</option>
-            <option v-for="classItem in classNames" :key="classItem" :value="classItem">{{ classItem }}</option>
-          </select>
-          <span v-if="errors.Class_name" class="text-red-500 text-sm">{{ errors.Class_name[0] }}</span>
-        </div>
-      </section>
-
-              <!-- Student Information Section -->
-              <section>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6">Student Information</h3>
-
-                <!-- Names in different languages -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div>
-                    <label for="studentBanglaName" class="block text-sm font-medium text-gray-700">
-                      Name in Bangla <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="studentBanglaName"
-                      v-model="formData.student_bangla_name"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="studentArabicName" class="block text-sm font-medium text-gray-700">
-                      Name in Arabic <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="studentArabicName"
-                      v-model="formData.student_arabic_name"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="studentEnglishName" class="block text-sm font-medium text-gray-700">
-                      Name in English <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="studentEnglishName"
-                      v-model="formData.student_english_name"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <!-- Father's Names -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                  <div>
-                    <label for="fatherNameBn" class="block text-sm font-medium text-gray-700">
-                      Father's Name (Bangla) <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="fatherNameBn"
-                      v-model="formData.student_Father_name_bn"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="fatherNameAr" class="block text-sm font-medium text-gray-700">
-                      Father's Name (Arabic) <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="fatherNameAr"
-                      v-model="formData.student_Father_name_ar"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="fatherNameEn" class="block text-sm font-medium text-gray-700">
-                      Father's Name (English) <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="fatherNameEn"
-                      v-model="formData.student_Father_name_en"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <!-- Academic Information -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                  <div>
-                    <label for="roll" class="block text-sm font-medium text-gray-700">
-                      Roll Number <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      id="roll"
-                      v-model="formData.Roll"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="regId" class="block text-sm font-medium text-gray-700">
-                      Registration ID <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      id="regId"
-                      v-model="formData.reg_id"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="mid" class="block text-sm font-medium text-gray-700">
-                      MID <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="number"
-                      id="mid"
-                      v-model="formData.MID"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <!-- Madrasha Information -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                  <div>
-                    <label for="madrashaNameEn" class="block text-sm font-medium text-gray-700">
-                      Madrasha Name (English) <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="madrashaNameEn"
-                      v-model="formData.madrasha_name_en"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label for="madrashaName" class="block text-sm font-medium text-gray-700">
-                      Madrasha Name (Bangla) <span class="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="madrashaName"
-                      v-model="formData.madrasha_name"
-                      class="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                </div>
-              </section>
-
-              <!-- Photo Upload Section -->
-              <section>
-                <label class="block text-sm font-medium text-gray-700">Photo Upload <span class="text-red-500">*</span></label>
-                <div class="form-group">
-            <label for="photo">Photo</label>
-            <input id="photo" type="file" @change="handlePhotoSelect" class="form-control" />
-            <img v-if="photoPreview" :src="photoPreview" alt="Preview" style="max-width: 100px;" />
-            <span v-if="errors.photo" class="text-danger">{{ errors.photo[0] }}</span>
-          </div>
-              </section>
-
-              <!-- Submit Section -->
-              <section>
-                <div class="flex justify-between items-center border-t pt-6">
-                  <p class="text-sm text-gray-500">All fields marked with <span class="text-red-500">*</span> are required.</p>
-                  <div class="space-x-3">
-                    <button
-                      type="button"
-                      @click="resetForm"
-                      class="px-4 py-2 rounded-md border shadow-sm text-sm font-medium bg-white hover:bg-gray-50"
-                    >
-                      Reset
-                    </button>
-                    <div class="mt-6">
-                 <!-- Replace the existing submit button with this -->
-                 <button type="submit" :disabled="processing" class="btn btn-primary">
-            Submit
-          </button>
-
-                </div>
-                  </div>
-                </div>
-              </section>
-            </form>
-          </div>
-        </div>
-
-        </div>
       </div>
 
 
@@ -302,121 +190,70 @@
 
       </template>
 
-    <script setup>
-    import { ref, reactive, watch } from "vue";
-    import { usePage, router } from "@inertiajs/vue3";
-    import CertificateAgreement from './CertificateAgreement.vue'
 
-    const showApplicationForm = ref(false)
+   <script setup>
+import { ref, reactive, watch, computed } from "vue";
+import { usePage, router } from "@inertiajs/vue3";
+import { Head, Link } from '@inertiajs/vue3';
+import CertificateAgreement from './CertificateAgreement.vue';
 
+const showApplicationForm = ref(false);
+const currentLanguage = ref('bn');
+const activeTab = ref('certificate');
+const isLoading = ref(false);
 
-    // Reactive form data
-    const formData = reactive({
-      Certificate_Type: "",
-      Class_name: "",
-      student_bangla_name: "",
-      student_arabic_name: "",
-      student_english_name: "",
-      student_Father_name_bn: "",
-      student_Father_name_ar: "",
-      student_Father_name_en: "",
-      Roll: "",
-      reg_id: "",
-      MID: "",
-      madrasha_name_en: "",
-      madrasha_name: "",
-      photo: null,
+// Define props from backend
+const props = defineProps({
+  availableYears: Array,
+  searchResults: Array
+});
 
+const searchForm = reactive({
+  years: '',
+  Roll: '',
+  reg_id: '',
+  Name: '',
+});
 
-    });
+const tabs = [
+  { id: 'certificate', labelBn: 'বাংলা-ইংরেজি আবেদন ', labelEn: 'Certificate' },
+  { id: 'transcript', labelBn: ' আরবি-ইংরেজি আবেদন', labelEn: 'Transcript' },
+];
 
-    // Reactive state for errors, flash messages, etc.
-    const errors = ref({});
-    const flashMessage = ref("");
-    const photoPreview = ref(null);
-    const processing = ref(false);
+const searchTitles = {
+  certificate: { bn: 'সনদপত্র অনুসন্ধান', en: 'Certificate Search' },
+  transcript: { bn: 'ট্রান্সক্রিপ্ট অনুসন্ধান', en: 'Transcript Search' },
+};
 
-    // Accessing Inertia.js page properties
-    const page = usePage();
+// Use backend years
+const years = computed(() => props.availableYears);
 
-    // Watch for flash messages
-    watch(
-      () => page.props.flash,
-      (newFlash) => {
-        if (newFlash?.success) {
-          flashMessage.value = newFlash.success;
-          setTimeout(() => {
-            flashMessage.value = "";
-          }, 5000);
-        }
-      },
-      { deep: true }
-    );
+const handleSearch = () => {
+  isLoading.value = true;
 
-    // Handle photo selection
-    const handlePhotoSelect = (event) => {
-      const file = event.target.files[0];
-      if (file && file.size <= 2 * 1024 * 1024) {
-        formData.photo = file;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          photoPreview.value = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        flashMessage.value = "Photo size should not exceed 2MB";
-      }
-    };
-
-    // Submit form data
-    const submit = () => {
-      processing.value = true;
-
-      const data = new FormData();
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
-
-      router.post(route("applications.store"), data, {
-        preserveScroll: true,
-        onSuccess: () => {
-          Object.keys(formData).forEach((key) => (formData[key] = ""));
-          photoPreview.value = null;
-          processing.value = false;
-          flashMessage.value = "Application submitted successfully!";
-        },
-        onError: (receivedErrors) => {
-          errors.value = receivedErrors;
-          processing.value = false;
-        },
-      });
-    };
-
-    const certificateTypes = [
-      "Professional Certificate",
-      "Academic Certificate",
-      "Certificate of Completion",
-    ];
-
-    const classNames = [
-      "Class 1",
-      "Class 2",
-      "Class 3",
-      "Class 4",
-      "Class 5",
-    ];
-
-    // Reactive form data
-
-
-
-    </script>
-
-    <style scoped>
-    .alert {
-      margin-bottom: 1rem;
+  router.get('/applicationForm', searchForm, {
+    preserveState: true,
+    preserveScroll: true,
+    onFinish: () => {
+      isLoading.value = false;
     }
-    .text-danger {
-      font-size: 0.875rem;
-    }
-    </style>
+  });
+};
+</script>
+
+
+
+
+
+  <style scoped>
+  .form-select,
+  .form-input {
+    @apply w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500;
+  }
+
+  .btn-primary {
+    @apply bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700
+           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+           font-semibold shadow-md hover:shadow-lg;
+  }
+  </style>
