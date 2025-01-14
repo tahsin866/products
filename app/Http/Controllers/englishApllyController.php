@@ -54,7 +54,7 @@ class englishApllyController extends Controller
             ->where('reg_id', $reg_id)
             ->firstOrFail();
 
-        return inertia::render('Fajilat/fazilatDetailes', [
+        return inertia::render('applicationStuDetailes', [
             'studentDetails' => $details,
         ]);
     }

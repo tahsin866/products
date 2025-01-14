@@ -130,7 +130,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/applicationForm', [englishApllyController::class, 'search'])->name('applicationForm');
-
+Route::get('/applicationStuDetailes/{Roll}/{reg_id}', [englishApllyController::class, 'details'])->name('applicationStuDetailes');
 
 
 

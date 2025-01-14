@@ -63,32 +63,32 @@ const getGrade = (marks) => {
     return 'F'
 }
 
-const updateProfile = () => {
-    isLoading.value = true
-    router.put(route('Fajilat.update'), studentDetails, {
-        preserveScroll: true,
-        onSuccess: () => {
-            isLoading.value = false
-            toast.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'তথ্য সফলভাবে সংরক্ষণ করা হয়েছে',
-                life: 3000
-            })
-        }
-    })
-}
+// const updateProfile = () => {
+//     isLoading.value = true
+//     router.put(route('Fajilat.update'), studentDetails, {
+//         preserveScroll: true,
+//         onSuccess: () => {
+//             isLoading.value = false
+//             toast.add({
+//                 severity: 'success',
+//                 summary: 'Success',
+//                 detail: 'তথ্য সফলভাবে সংরক্ষণ করা হয়েছে',
+//                 life: 3000
+//             })
+//         }
+//     })
+// }
 
 
 // pdf
 
 
-const downloadCertificate = () => {
-    window.location.href = route('Fajilat.certificate.pdf', {
-        Roll: studentDetails.Roll,
-        reg_id: studentDetails.reg_id
-    });
-};
+// const downloadCertificate = () => {
+//     window.location.href = route('Fajilat.certificate.pdf', {
+//         Roll: studentDetails.Roll,
+//         reg_id: studentDetails.reg_id
+//     });
+// };
 
 </script>
 

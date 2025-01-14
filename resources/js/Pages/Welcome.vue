@@ -80,85 +80,117 @@ function handleImageError() {
 
                 </header>
 
-                <main class="mt-6">
-                    <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                        <!-- Certificate Creation Card -->
-                        <a
-                            :href="route('applicationForm')"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg transition hover:shadow-xl"
-                        >
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                                <svg class="size-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                </svg>
-                            </div>
+                <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+    <div class="grid gap-8 lg:grid-cols-2 xl:grid-cols-2">
+        <!-- Certificate Creation Card -->
+        <a
+            :href="route('applicationForm')"
+            class="group relative flex items-start gap-6 rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+        >
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
 
-                            <div class="pt-3">
-                                <h2 class="text-xl font-semibold text-black">সনদের আবেদন</h2>
-                                <p class="mt-4 text-sm/relaxed">
-                                    Generate new certificates for your students or employees. Customize templates and add digital signatures.
-                                </p>
-                            </div>
-                        </a>
+            <div class="flex size-16 shrink-0 items-center justify-center rounded-full bg-blue-100 ring-8 ring-blue-50 transition-all duration-300 group-hover:bg-blue-200">
+                <svg class="size-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+            </div>
 
-                        <!-- Certificate Verification Card -->
-                        <a
-                            href="/certificates/verify"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg transition hover:shadow-xl"
-                        >
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100">
-                                <svg class="size-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </div>
+            <div class="relative pt-3">
+                <h2 class="text-2xl font-bold text-gray-900">সনদের আবেদন</h2>
+                <p class="mt-4 text-base text-gray-600">
+                    Generate new certificates for your students or employees. Customize templates and add digital signatures.
+                </p>
+                <div class="mt-4 flex items-center text-blue-600">
+                    <span class="text-sm font-semibold">Get Started</span>
+                    <svg class="ml-2 size-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </a>
 
-                            <div class="pt-3">
-                                <h2 class="text-xl font-semibold text-black">সনদ স্টাটাস চেক</h2>
-                                <p class="mt-4 text-sm/relaxed">
-                                    Verify the authenticity of certificates using our secure verification system.
-                                </p>
-                            </div>
-                        </a>
+        <!-- Certificate Verification Card -->
+        <a
+            href="/certificates/verify"
+            class="group relative flex items-start gap-6 rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+        >
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
 
-                        <!-- Certificate Management Card -->
-                        <a
-                            href="/certificates/manage"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg transition hover:shadow-xl"
-                        >
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-purple-100">
-                                <svg class="size-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                            </div>
+            <div class="flex size-16 shrink-0 items-center justify-center rounded-full bg-green-100 ring-8 ring-green-50 transition-all duration-300 group-hover:bg-green-200">
+                <svg class="size-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
 
-                            <div class="pt-3">
-                                <h2 class="text-xl font-semibold text-black">ফলাফল অনুসন্ধান</h2>
-                                <p class="mt-4 text-sm/relaxed">
-                                    View, edit, and manage all your issued certificates in one place.
-                                </p>
-                            </div>
-                        </a>
+            <div class="relative pt-3">
+                <h2 class="text-2xl font-bold text-gray-900">সনদ স্টাটাস চেক</h2>
+                <p class="mt-4 text-base text-gray-600">
+                    Verify the authenticity of certificates using our secure verification system.
+                </p>
+                <div class="mt-4 flex items-center text-green-600">
+                    <span class="text-sm font-semibold">Verify Now</span>
+                    <svg class="ml-2 size-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </a>
 
-                        <!-- Template Library Card -->
-                        <a
-                            href="/certificates/templates"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-lg transition hover:shadow-xl"
-                        >
-                            <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-yellow-100">
-                                <svg class="size-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-                                </svg>
-                            </div>
+        <!-- Certificate Management Card -->
+        <a
+            href="/certificates/manage"
+            class="group relative flex items-start gap-6 rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+        >
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
 
-                            <div class="pt-3">
-                                <h2 class="text-xl font-semibold text-black">মারহালাওয়ারী ফলাফল অনুসন্ধান</h2>
-                                <p class="mt-4 text-sm/relaxed">
-                                    Browse and customize our collection of professional certificate templates.
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                </main>
+            <div class="flex size-16 shrink-0 items-center justify-center rounded-full bg-purple-100 ring-8 ring-purple-50 transition-all duration-300 group-hover:bg-purple-200">
+                <svg class="size-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+            </div>
+
+            <div class="relative pt-3">
+                <h2 class="text-2xl font-bold text-gray-900">ফলাফল অনুসন্ধান</h2>
+                <p class="mt-4 text-base text-gray-600">
+                    View, edit, and manage all your issued certificates in one place.
+                </p>
+                <div class="mt-4 flex items-center text-purple-600">
+                    <span class="text-sm font-semibold">Manage Certificates</span>
+                    <svg class="ml-2 size-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </a>
+
+        <!-- Template Library Card -->
+        <a
+            href="/certificates/templates"
+            class="group relative flex items-start gap-6 rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+        >
+            <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-yellow-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
+
+            <div class="flex size-16 shrink-0 items-center justify-center rounded-full bg-yellow-100 ring-8 ring-yellow-50 transition-all duration-300 group-hover:bg-yellow-200">
+                <svg class="size-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                </svg>
+            </div>
+
+            <div class="relative pt-3">
+                <h2 class="text-2xl font-bold text-gray-900">মারহালাওয়ারী ফলাফল অনুসন্ধান</h2>
+                <p class="mt-4 text-base text-gray-600">
+                    Browse and customize our collection of professional certificate templates.
+                </p>
+                <div class="mt-4 flex items-center text-yellow-600">
+                    <span class="text-sm font-semibold">Browse Templates</span>
+                    <svg class="ml-2 size-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </a>
+    </div>
+</main>
 
                 <footer class="py-16 text-center text-sm text-black dark:text-white/70">
                     Certificate System v1.0
