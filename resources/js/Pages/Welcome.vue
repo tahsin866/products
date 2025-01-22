@@ -138,7 +138,7 @@ function handleImageError() {
 
         <!-- Certificate Management Card -->
         <a
-            href="/certificates/manage"
+         :href="route('find_result.studentResultFind')"
             class="group relative flex items-start gap-6 rounded-xl bg-white p-8 shadow-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
         >
             <div class="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>

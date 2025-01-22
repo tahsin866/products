@@ -104,7 +104,7 @@ const downloadCertificate = () => {
 
   <div class="max-w-full  mx-5">
     <!-- Profile Header Card -->
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+    <div class="bg-white rounded-md shadow-sm overflow-hidden mb-8">
       <div class="bg-gradient-to-r from-slate-800 to-zinc-900 p-8">
         <div class="flex flex-col md:flex-row items-center">
           <div class="relative">
@@ -170,7 +170,7 @@ const downloadCertificate = () => {
       <!-- Left Column -->
         <div class="lg:col-span-2 space-y-8">
             <!-- Personal Details Card -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-white rounded-md shadow-lg overflow-hidden">
     <!-- Keeping the header -->
     <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4 ">
         <h2 class="text-2xl font-bold text-white flex items-center gap-2">
@@ -318,7 +318,7 @@ const downloadCertificate = () => {
 
 
             <!-- Academic Performance Card -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-white rounded-md shadow-lg overflow-hidden">
     <!-- Header -->
     <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4">
         <div class="flex justify-between items-center">
@@ -389,7 +389,7 @@ const downloadCertificate = () => {
       <!-- Right Column -->
       <div class="space-y-8">
         <!-- Quick Stats Card -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="bg-white rounded-md shadow-sm p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6">এক নজরে ফলাফল</h2>
           <div class="space-y-4">
             <div class="flex items-center p-4 bg-gray-50 rounded-lg">

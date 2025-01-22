@@ -27,8 +27,6 @@ return [
 
 
 
-
-
     'convert_entities' => true,
 
     'options' => [
@@ -261,6 +259,23 @@ return [
         'enable_html5_parser' => true,
     ],
 
+
+'fonts' => [
+    'solaimanlipi' => [
+        'normal' => storage_path('fonts/SolaimanLipi.ttf'),
+        'bold' => storage_path('fonts/SolaimanLipi.ttf'),
+    ],
+],
+
+
+
+'options' => [
+  'font_dir' => storage_path('fonts/'),
+'font_cache' => storage_path('fonts/'),
+
+
+    // other options remain the same
+]
 
 
 

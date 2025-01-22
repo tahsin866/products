@@ -253,7 +253,7 @@ onMounted(() => {
          class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
         <!-- Total Students Card -->
-        <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 border border-purple-100 hover:shadow-lg transition-all duration-300">
+        <div class="bg-gradient-to-br from-purple-50 to-white rounded-md p-6 border border-purple-100 hover:shadow-lg transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div class="space-y-4">
                     <div class="flex items-baseline space-x-2">
@@ -268,13 +268,9 @@ onMounted(() => {
                     </svg>
                 </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-purple-100">
-
-            </div>
         </div>
 
-        <!-- Male Students Card -->
-        <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100 hover:shadow-lg transition-all duration-300">
+        <div class="bg-gradient-to-br from-blue-50 to-white rounded-md p-6 border border-blue-100 hover:shadow-lg transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div class="space-y-4">
                     <div class="flex items-baseline space-x-2">
@@ -293,9 +289,8 @@ onMounted(() => {
 
             </div>
         </div>
-
-        <!-- Female Students Card -->
-        <div class="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-6 border border-pink-100 hover:shadow-lg transition-all duration-300">
+            <!-- Female Students Card -->
+            <div class="bg-gradient-to-br from-pink-50 to-white rounded-md p-6 border border-pink-100 hover:shadow-lg transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div class="space-y-4">
                     <div class="flex items-baseline space-x-2">
@@ -315,8 +310,8 @@ onMounted(() => {
             </div>
         </div>
 
-        <!-- Year Total Card -->
-        <div class="bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 border border-emerald-100 hover:shadow-lg transition-all duration-300">
+
+        <div class="bg-gradient-to-br from-emerald-50 to-white rounded-md p-6 border border-emerald-100 hover:shadow-lg transition-all duration-300">
             <div class="flex justify-between items-start">
                 <div class="space-y-4">
                     <div class="flex items-baseline space-x-2">
@@ -335,9 +330,9 @@ onMounted(() => {
 
             </div>
         </div>
+        <!-- Similar cards for Male, Female, and Year Total -->
+        <!-- ... other cards remain the same ... -->
     </div>
-
-
 
 
 
@@ -350,11 +345,11 @@ onMounted(() => {
         <!-- end card -->
 
         <div class="p-6 bg-gray-50 min-h-screen">
-        <div class="bg-white shadow-xl rounded-xl p-6">
+        <div class="bg-white shadow-xl rounded-md p-6">
 
   <div class="grid grid-cols-1 gap-6 mb-6">
         <!-- Filter Section -->
-        <div class="bg-white shadow-xl rounded-xl">
+        <div class="bg-white shadow-xl rounded-md">
             <div class="p-4 border-b border-gray-200">
                 <h2 class="text-lg font-semibold text-gray-800">ফিল্টার অপশন</h2>
             </div>
@@ -364,7 +359,7 @@ onMounted(() => {
                         v-if="years.length > 0"
                         v-model="selectedYear"
                         @change="filterByYear"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400"
                     >
                         <option value="">বছর নির্বাচন করুন</option>
                         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
@@ -375,7 +370,7 @@ onMounted(() => {
                     v-if ="SRType.length > 0"
                         v-model="selectedSRType"
                         @change="filterBySRType"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md"
                     >
                         <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
                         <option value="1">ছাত্র</option>
@@ -388,21 +383,21 @@ onMounted(() => {
                     v-if ="division.length > 0"
                         v-model="selecteddivision"
                         @change="filterBydivision"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md"
                     >
                         <option value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
                         <!-- <option value="1">ছাত্র</option>
                         <option value="0">ছাত্রী</option> -->
                     </select>
 
-<select v-model="selectedDistrict" class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg">
+<select v-model="selectedDistrict" class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md">
     <option value="">জেলা নির্বাচন করুন</option>
     <option v-for="district in filteredDistricts" :key="district.DesID" :value="district.DesID">
         {{ district.district }}
     </option>
 </select>
 
-<select v-model="selectedThana" class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg">
+<select v-model="selectedThana" class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md">
     <option value="">থানা নির্বাচন করুন</option>
     <option v-for="thana in filteredThanas" :key="thana.ID" :value="thana.ID">
         {{ thana.thana }}
@@ -414,7 +409,7 @@ onMounted(() => {
         </div>
 
         <!-- Search Section -->
-        <div class="bg-white shadow-xl rounded-xl">
+        <div class="bg-white shadow-xl rounded-md">
             <div class="p-4 border-b border-gray-200">
                 <h2 class="text-lg font-semibold text-gray-800">অনুসন্ধান</h2>
             </div>
@@ -424,25 +419,25 @@ onMounted(() => {
                         type="text"
                         v-model="Roll"
                         placeholder="রোল নম্বর লিখুন"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md"
                     />
                     <input
                         type="text"
                         v-model="Roll2"
                         placeholder="দ্বিতীয় রোল নম্বর"
-                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+                        class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md"
                     />
                 <input
             type="text"
             v-model="form.Elhaq"
 
             placeholder="ইলহাক নম্বর লিখুন"
-            class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg"
+            class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-md"
             @input="search"
         />
                     <button
                     @click="searchStudent()"
-    class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center gap-2"
+    class="px-6 py-2.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center gap-2"
 
                     >
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -455,7 +450,7 @@ onMounted(() => {
         </div>
 
         <!-- Action Buttons -->
-        <div class="bg-white shadow-xl rounded-xl">
+        <div class="bg-white shadow-xl rounded-md">
             <div class="p-4 border-b border-gray-200">
                 <h2 class="text-lg font-semibold text-gray-800">অ্যাকশন</h2>
             </div>
@@ -478,7 +473,7 @@ onMounted(() => {
         </div>
     </div>
 
-            <div class="overflow-hidden rounded-xl border border-gray-200">
+            <div class="overflow-hidden rounded-md border border-gray-200">
                 <table style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="w-full">
                     <thead class="bg-gray-50 border-b border-gray-200">
                         <tr>

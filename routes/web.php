@@ -5,6 +5,7 @@ use App\Http\Controllers\mutawassitahController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CertificateApplicationController;
 use App\Http\Controllers\englishApllyController;
+use App\Http\Controllers\findtStudentController;
 use App\Http\Controllers\porductController;
 use App\Http\Controllers\sanawiaController;
 use App\Http\Controllers\takmilController;
@@ -131,6 +132,17 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/applicationForm', [englishApllyController::class, 'search'])->name('applicationForm');
 Route::get('/applicationStuDetailes/{Roll}/{reg_id}', [englishApllyController::class, 'details'])->name('applicationStuDetailes');
+// Route::put('/applicationStuDetailes/update', [englishApllyController::class, 'update'])->name('applicationStuDetailes.update');
+
+Route::put('/applicationStuDetailes/update', [englishApllyController::class, 'update'])
+    ->name('applicationStuDetailes.update');
+
+
+// find_result
+
+Route::get('find_result/studentResultFind', [findtStudentController::class, 'search'])
+    ->name('find_result.studentResultFind');
+
 
 
 

@@ -1,6 +1,6 @@
 <script setup>
 import { usePage, useForm } from "@inertiajs/vue3"
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue"
+
 import { ref, computed } from 'vue'
 import PrimaryButton from "@/Components/PrimaryButton.vue"
 import { router } from '@inertiajs/vue3'
@@ -63,21 +63,39 @@ const getGrade = (marks) => {
     return 'F'
 }
 
-// const updateProfile = () => {
-//     isLoading.value = true
-//     router.put(route('Fajilat.update'), studentDetails, {
-//         preserveScroll: true,
-//         onSuccess: () => {
-//             isLoading.value = false
-//             toast.add({
-//                 severity: 'success',
-//                 summary: 'Success',
-//                 detail: 'তথ্য সফলভাবে সংরক্ষণ করা হয়েছে',
-//                 life: 3000
-//             })
-//         }
-//     })
-// }
+const updateProfile = () => {
+    isLoading.value = true
+    router.put(route('applicationStuDetailes.update'), studentDetails, {
+        preserveScroll: true,
+        onSuccess: () => {
+            isLoading.value = false
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'তথ্য সফলভাবে সংরক্ষণ করা হয়েছে',
+                life: 3000
+            })
+        }
+    })
+}
+
+
+
+
+const handlePhotoUpload = (event) => {
+  studentDetails.value.photo = event.target.files[0]
+}
+
+const handleDocumentsUpload = (event) => {
+  studentDetails.value.documents = Array.from(event.target.files)
+}
+
+
+
+
+
+
+
 
 
 // pdf
@@ -94,17 +112,16 @@ const getGrade = (marks) => {
 
 
 <template>
-  <AuthenticatedLayout>
 
 
-    <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="min-h-screen bg-gray-50 py-12">
-        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('Fajilat.certificate'))">
+    <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="min-h-screen bg-gray-50 py-12 max-w-7xl mx-auto">
+        <PrimaryButton class="mx-5 mb-3" @click="$inertia.get(route('applicationForm'))">
     BACK
 </PrimaryButton>
 
   <div class="max-w-full  mx-5">
     <!-- Profile Header Card -->
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+    <div class="bg-white rounded-md shadow-sm overflow-hidden mb-8">
       <div class="bg-gradient-to-r from-slate-800 to-zinc-900 p-8">
         <div class="flex flex-col md:flex-row items-center">
           <div class="relative">
@@ -129,7 +146,7 @@ const getGrade = (marks) => {
             </div>
           </div>
           <div class="md:ml-auto mt-4 md:mt-0">
-            <div class="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
+            <div class="bg-white/10 rounded-md p-4 backdrop-blur-sm">
               <p class="text-white text-sm font-semibold">Academic Performance</p>
               <div class="mt-2">
                 <div class="w-full bg-white/20 rounded-full h-2">
@@ -170,9 +187,9 @@ const getGrade = (marks) => {
       <!-- Left Column -->
         <div class="lg:col-span-2 space-y-8">
             <!-- Personal Details Card -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-    <!-- Keeping the header -->
-    <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4 ">
+            <div class="bg-white rounded-md shadow-lg overflow-hidden">
+    <!-- Header -->
+    <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4">
         <h2 class="text-2xl font-bold text-white flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -182,118 +199,123 @@ const getGrade = (marks) => {
     </div>
 
     <div class="p-6">
-        <table class="min-w-full divide-y divide-gray-200">
-            <tbody class="divide-y divide-gray-200">
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap w-1/3">
-                        <span class="text-md font-semibold text-gray-600">নাম আরবি</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Name }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">নাম ইংরেজি</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_name }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">পিতার নাম আরবি</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Father }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">পিতার নাম ইংরেজি</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.st_en_Fname }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">রোল নম্বর</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Roll }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">রেজিস্ট্রেশন নম্বর</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.reg_id }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">জন্ম-তারিখ</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.DateofBirth }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">জাতিয়তা</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Nationality }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">মোবাইল নম্বর</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.mobileNumber }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">জন্মনিবন্ধন নম্বর</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.BirthRegistrationNo_nid_no }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">হিজরি সন</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Hijri_years }} হি:</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">মাদরাসার নাম</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.Madrasha }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-md font-semibold text-gray-600">মাদরাসার নাম ইংরেজি</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="text-lg font-medium text-gray-900">{{ studentDetails.MadrashaNameEn }}</span>
-                    </td>
+        <form @submit.prevent="updateProfile" class="max-w-5xl mx-auto">
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">ব্যক্তিগত তথ্য</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Name Fields -->
+                    <div>
+                        <label for="name-arabic" class="block text-lg font-medium text-gray-700 mb-2">নাম আরবি</label>
+                        <input id="name-arabic" v-model="studentDetails.Name" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+                    <div>
+                        <label for="name-english" class="block text-lg font-medium text-gray-700 mb-2">নাম ইংরেজি</label>
+                        <input id="name-english" v-model="studentDetails.st_en_name" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
 
-                    <!-- {{ studentDetails.madrasha ? studentDetails.madrasha.Thana_uni : "N/A" }} -->
-                </tr>
-            </tbody>
-        </table>
+                    <!-- Father's Name Fields -->
+                    <div>
+                        <label for="father-arabic" class="block text-lg font-medium text-gray-700 mb-2">পিতার নাম আরবি</label>
+                        <input id="father-arabic" v-model="studentDetails.Father" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+                    <div>
+                        <label for="father-english" class="block text-lg font-medium text-gray-700 mb-2">পিতার নাম ইংরেজি</label>
+                        <input id="father-english" v-model="studentDetails.st_en_Fname" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+
+                    <!-- Contact and ID Fields -->
+                    <div>
+                        <label for="mobile-number" class="block text-lg font-medium text-gray-700 mb-2">মোবাইল নম্বর</label>
+                        <input id="mobile-number" v-model="studentDetails.mobileNumber" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+                    <div>
+                        <label for="birth-reg" class="block text-lg font-medium text-gray-700 mb-2">জন্মনিবন্ধ নম্বর</label>
+                        <input id="birth-reg" v-model="studentDetails.BirthRegistrationNo_nid_no" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+
+                    <!-- Madrasha and DOB Fields -->
+                    <div>
+                        <label for="madrasha-name-en" class="block text-lg font-medium text-gray-700 mb-2">মাদরাসার নাম ইংরেজি</label>
+                        <input id="madrasha-name-en" v-model="studentDetails.MadrashaNameEn" type="text" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+                    <div>
+                        <label for="dob" class="block text-lg font-medium text-gray-700 mb-2">জন্ম তারিখ</label>
+                        <input id="dob" v-model="studentDetails.DateofBirth" type="date" required
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400" />
+                    </div>
+
+                    <!-- Class and Gender Selection -->
+                    <div>
+                        <label for="class" class="block text-lg font-medium text-gray-700 mb-2">ছনদের ধরন</label>
+                        <select id="class" v-model="studentDetails.class"
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400">
+                            <option value="">ছনদের ধরন নির্বাচন করুন</option>
+
+                            <option value="2">সাময়ীক সনদ</option>
+                            <option value="3">সংশোধনী সনদ</option>
+                            <option value="4">ডুপলিকেট সনদ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="gender" class="block text-lg font-medium text-gray-700 mb-2">সনদরে ভাষা</label>
+                        <select id="gender" v-model="studentDetails.gender"
+                            class="block w-full px-4 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400">
+                            <option value="">সনদরে ভাষা নির্বাচন করুন</option>
+                            <option value="male">বাংলা-ইংরেজি </option>
+                            <option value="female">আরবি ইংরেজি</option>
+                            <option value="female">উভয়টা</option>
+                        </select>
+                    </div>
+
+                    <!-- File Upload Section -->
+                    <div class="col-span-2">
+                        <div class="p-6 bg-gray-50 rounded-xl">
+                            <!-- Photo Upload -->
+                            <div class="mb-6">
+                                <label for="photo" class="block text-lg font-medium text-gray-700 mb-2">
+                                    ছবি <span class="text-sm text-gray-500">(JPG, PNG accepted)</span>
+                                </label>
+                                <div class="relative">
+                                    <input id="photo" type="file" accept="image/*" @change="handlePhotoUpload"
+                                        class="block w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition duration-150 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">Maximum file size: 5MB</p>
+                            </div>
+
+                            <!-- Documents Upload -->
+                            <div class="mb-6">
+                                <label for="documents" class="block text-lg font-medium text-gray-700 mb-2">
+                                    প্রয়োজনীয় ডকুমেন্টস <span class="text-sm text-gray-500">(Multiple files allowed)</span>
+                                </label>
+                                <div class="relative">
+                                    <input id="documents" type="file" multiple @change="handleDocumentsUpload"
+                                        class="block w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition duration-150 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500">Accepted formats: PDF, DOC, DOCX</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center pt-6">
+                <button type="submit" :disabled="isLoading"
+                    class="w-full md:w-auto bg-blue-600 text-white py-2 px-5 rounded-lg font-medium text-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50">
+                    {{ isLoading ? 'সংরক্ষণ করা হচ্ছে...' : 'সংরক্ষণ করুন' }}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
 
 
 
@@ -318,7 +340,7 @@ const getGrade = (marks) => {
 
 
             <!-- Academic Performance Card -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-white rounded-md shadow-lg overflow-hidden">
     <!-- Header -->
     <div class="relative border-b bg-gradient-to-r from-slate-800 to-zinc-900 p-4">
         <div class="flex justify-between items-center">
@@ -441,114 +463,7 @@ const getGrade = (marks) => {
         </div>
 
         <!-- Update Profile Form -->
-        <div class="bg-gradient-to-br from-gray-50 to-gray-200 rounded-2xl shadow-md p-10 max-w-4xl mx-auto">
-  <h2 class="text-3xl font-extrabold text-gray-800 mb-6 text-center border-b-2 pb-4">তথ্য সংশোধন</h2>
 
-  <form @submit.prevent="updateProfile" class="space-y-8">
-    <!-- Name Section -->
-    <div>
-      <label for="name-arabic" class="block text-lg font-medium text-gray-700 mb-2">নাম আরবি</label>
-      <input
-        id="name-arabic"
-        v-model="studentDetails.Name"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <div>
-      <label for="name-english" class="block text-lg font-medium text-gray-700 mb-2">নাম ইংরেজি</label>
-      <input
-        id="name-english"
-        v-model="studentDetails.st_en_name"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <!-- Father's Name Section -->
-    <div>
-      <label for="father-arabic" class="block text-lg font-medium text-gray-700 mb-2">পিতার নাম আরবি</label>
-      <input
-        id="father-arabic"
-        v-model="studentDetails.Father"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <div>
-      <label for="father-english" class="block text-lg font-medium text-gray-700 mb-2">পিতার নাম ইংরেজি</label>
-      <input
-        id="father-english"
-        v-model="studentDetails.st_en_Fname"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <!-- Contact and ID Section -->
-    <div>
-      <label for="mobile-number" class="block text-lg font-medium text-gray-700 mb-2">মোবাইল নম্বর</label>
-      <input
-        id="mobile-number"
-        v-model="studentDetails.mobileNumber"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <div>
-      <label for="birth-reg" class="block text-lg font-medium text-gray-700 mb-2">জন্মনিবন্ধ নম্বর</label>
-      <input
-        id="birth-reg"
-        v-model="studentDetails.BirthRegistrationNo_nid_no"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <!-- Additional Details -->
-    <div>
-      <label for="madrasha-name-en" class="block text-lg font-medium text-gray-700 mb-2">মাদরাসার নাম ইংরেজি</label>
-      <input
-        id="madrasha-name-en"
-        v-model="studentDetails.MadrashaNameEn"
-        type="text"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <div>
-      <label for="dob" class="block text-lg font-medium text-gray-700 mb-2">জন্ম তারিখ</label>
-      <input
-        id="dob"
-        v-model="studentDetails.DateofBirth"
-        type="date"
-        required
-        class="block w-full px-4 py-3 rounded-lg border-gray-300 shadow focus:ring-blue-400 focus:border-blue-400"
-      />
-    </div>
-
-    <!-- Submit Button -->
-    <div class="text-center pt-6">
-      <button
-        type="submit"
-        :disabled="isLoading"
-        class="w-full md:w-auto bg-blue-600 text-white py-3 px-6 rounded-lg font-medium text-lg shadow-md hover:bg-blue-700 transition disabled:opacity-50"
-      >
-        {{ isLoading ? 'সংরক্ষণ করা হচ্ছে...' : 'সংরক্ষণ করুন' }}
-      </button>
-    </div>
-  </form>
-</div>
 
 
 
@@ -557,5 +472,4 @@ const getGrade = (marks) => {
   </div>
 </div>
 
-  </AuthenticatedLayout>
 </template>

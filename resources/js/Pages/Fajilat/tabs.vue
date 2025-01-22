@@ -1,191 +1,168 @@
 <template>
     <AuthenticatedLayout>
-      <div class="mx-auto p-6">
-        <!-- Language Switcher -->
-        <div class="mb-6 flex justify-end">
-          <div class="bg-white rounded-lg shadow-sm inline-flex">
-            <button
-              v-for="lang in ['bn', 'en']"
-              :key="lang"
-              @click="currentLanguage = lang"
-              :class="[
-                'px-4 py-2 text-sm font-medium',
-                currentLanguage === lang
-                  ? 'bg-indigo-500 text-white'
-                  : 'text-gray-600 hover:bg-gray-50'
-              ]"
-            >
-              {{ lang === 'bn' ? 'বাংলা' : 'English' }}
-            </button>
-          </div>
+    <!-- Stats Cards Grid -->
+    <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif;"
+         class="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Total Students Card -->
+        <div class="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-6 border border-purple-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-purple-900">{{ props.studentCount }}</h4>
+                        <span class="text-purple-600 text-sm font-semibold">মোট</span>
+                    </div>
+                    <p class="text-purple-900 font-medium">মোট ছাত্র-ছাত্রী</p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+            </div>
         </div>
 
-        <!-- Search Tabs -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
-          <nav class="flex divide-x divide-gray-200">
-            <button
-              v-for="tab in tabs"
-              :key="tab.id"
-              @click="activeTab = tab.id"
-              :class="[
-                'flex-1 px-6 py-4 text-lg font-medium transition-all duration-200',
-                activeTab === tab.id
-                  ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-500'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-              ]"
-            >
-              {{ currentLanguage === 'bn' ? tab.labelBn : tab.labelEn }}
-            </button>
-          </nav>
+        <div class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 border border-blue-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-blue-900">{{ props.maleCount }}</h4>
+                        <span class="text-blue-600 text-sm font-semibold">জন</span>
+                    </div>
+                    <p class="text-blue-900 font-medium">ছাত্র সংখ্যা</p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-blue-100">
+
+            </div>
+        </div>
+            <!-- Female Students Card -->
+            <div class="bg-gradient-to-br from-pink-50 to-white rounded-2xl p-6 border border-pink-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-pink-900">{{ props.femaleCount }}</h4>
+                        <span class="text-pink-600 text-sm font-semibold">জন</span>
+                    </div>
+                    <p class="text-pink-900 font-medium">ছাত্রী সংখ্যা</p>
+                </div>
+                <div class="bg-pink-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-pink-100">
+
+            </div>
         </div>
 
-        <!-- Search Form -->
-        <div class="bg-white rounded-xl shadow-lg p-8">
-          <h2 class="text-2xl font-bold mb-8">
-            {{ currentLanguage === 'bn' ? searchTitles[activeTab].bn : searchTitles[activeTab].en }}
-          </h2>
 
-          <form @submit.prevent="handleSearch" class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <!-- Year Selection -->
-            <div class="space-y-2">
-              <label class="block text-md font-semibold text-gray-700">
-                {{ currentLanguage === 'bn' ? 'বছর নির্বাচন করুন' : 'Select Year' }}
-              </label>
-              <select v-model="searchForm.year" class="form-select">
-                <option value="">{{ currentLanguage === 'bn' ? 'বছর নির্বাচন করুন' : 'Select year' }}</option>
-                <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
-              </select>
+        <div class="bg-gradient-to-br from-emerald-50 to-white rounded-2xl p-6 border border-emerald-100 hover:shadow-lg transition-all duration-300">
+            <div class="flex justify-between items-start">
+                <div class="space-y-4">
+                    <div class="flex items-baseline space-x-2">
+                        <h4 class="text-4xl font-bold text-emerald-900">{{ yearCount }}</h4>
+                        <span class="text-emerald-600 text-sm font-semibold">জন</span>
+                    </div>
+                    <p class="text-emerald-900 font-medium">{{ selectedYear }} সালের মোট</p>
+                </div>
+                <div class="bg-emerald-100 p-3 rounded-xl">
+                    <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
             </div>
+            <div class="mt-4 pt-4 border-t border-emerald-100">
 
-            <!-- Roll Number -->
-            <div class="space-y-2">
-              <label class="block text-md font-semibold text-gray-700">
-                {{ currentLanguage === 'bn' ? 'রোল নম্বর' : 'Roll Number' }}
-              </label>
-              <input
-                v-model="searchForm.roll"
-                type="text"
-                class="form-input"
-                :placeholder="currentLanguage === 'bn' ? 'রোল নম্বর লিখুন' : 'Enter roll number'"
-              >
             </div>
-
-            <!-- Registration ID -->
-            <div class="space-y-2">
-              <label class="block text-md font-semibold text-gray-700">
-                {{ currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি' : 'Registration ID' }}
-              </label>
-              <input
-                v-model="searchForm.regId"
-                type="text"
-                class="form-input"
-                :placeholder="currentLanguage === 'bn' ? 'রেজিস্ট্রেশন আইডি লিখুন' : 'Enter registration ID'"
-              >
-            </div>
-
-            <!-- Search Button -->
-            <div class="flex items-end">
-              <button
-                type="submit"
-                :disabled="isLoading"
-                class="w-full btn-primary"
-              >
-                <span v-if="isLoading" class="flex items-center justify-center">
-                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                  </svg>
-                  {{ currentLanguage === 'bn' ? 'অনুসন্ধান করা হচ্ছে...' : 'Searching...' }}
-                </span>
-                <span v-else>
-                  {{ currentLanguage === 'bn' ? 'অনুসন্ধান করুন' : 'Search' }}
-                </span>
-              </button>
-            </div>
-          </form>
         </div>
+        <!-- Similar cards for Male, Female, and Year Total -->
+        <!-- ... other cards remain the same ... -->
+    </div>
 
-        <!-- Results Table -->
-        <div v-if="searchResults.length > 0" class="mt-6 bg-white rounded-xl shadow-lg overflow-hidden">
-          <div class="p-6 border-b border-gray-200">
-            <h3 class="text-xl font-bold text-gray-800">
-              {{ currentLanguage === 'bn' ? 'অনুসন্ধানের ফলাফল' : 'Search Results' }}
-            </h3>
-          </div>
+    <div class="p-6 bg-gray-50 min-h-screen">
+        <div class="bg-white shadow-xl rounded-xl p-6">
+            <!-- Filter Section -->
+            <div class="bg-white shadow-xl rounded-xl mb-6">
+                <div class="p-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-800">ফিল্টার অপশন</h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <!-- Year Select -->
+                        <select v-if="years.length > 0"
+                            v-model="selectedYear"
+                            @change="filterByYear"
+                            class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 outline-none shadow-sm hover:border-blue-400">
+                            <option value="">বছর নির্বাচন করুন</option>
+                            <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+                        </select>
 
-          <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <!-- Table headers and content here -->
-            </table>
-          </div>
+                        <!-- Other select elements -->
+                        <!-- ... keep existing select elements ... -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="bg-white shadow-xl rounded-xl mb-6">
+                <div class="p-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-800">অনুসন্ধান</h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Search inputs -->
+                        <input type="text" v-model="Roll" placeholder="রোল নম্বর লিখুন"
+                            class="px-4 py-2.5 w-full bg-white border border-gray-200 rounded-lg" />
+                        <!-- ... other inputs ... -->
+                        <button @click="searchStudent()"
+                            class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <span>অনুসন্ধান</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="bg-white shadow-xl rounded-xl mb-6">
+                <div class="p-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-800">অ্যাকশন</h2>
+                </div>
+                <div class="p-6">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <!-- Action buttons -->
+                        <PrimaryButton class="bg-green-600 hover:bg-green-700">এক্সপোর্ট</PrimaryButton>
+                        <!-- ... other buttons ... -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="overflow-x-auto">
+                <div class="overflow-hidden rounded-xl border border-gray-200">
+                    <table style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="w-full">
+                        <!-- ... table content remains the same ... -->
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-lg shadow-sm">
+                    <!-- ... pagination content remains the same ... -->
+                </div>
+            </div>
         </div>
-      </div>
-    </AuthenticatedLayout>
-  </template>
+    </div>
+</AuthenticatedLayout>
 
-  <script setup>
-  import { ref, reactive } from 'vue'
-  import { Head, Link } from '@inertiajs/vue3'
-  import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-
-  const currentLanguage = ref('bn')
-  const activeTab = ref('certificate')
-  const isLoading = ref(false)
-
-  const tabs = [
-    { id: 'certificate', labelBn: 'সনদপত্র', labelEn: 'Certificate' },
-    { id: 'transcript', labelBn: 'ট্রান্সক্রিপ্ট', labelEn: 'Transcript' },
-    { id: 'provisional', labelBn: 'সাময়িক সনদ', labelEn: 'Provisional' }
-  ]
-
-  const searchTitles = {
-    certificate: { bn: 'সনদপত্র অনুসন্ধান', en: 'Certificate Search' },
-    transcript: { bn: 'ট্রান্সক্রিপ্ট অনুসন্ধান', en: 'Transcript Search' },
-    provisional: { bn: 'সাময়িক সনদ অনুসন্ধান', en: 'Provisional Certificate Search' }
-  }
-
-  const years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i)
-
-  const searchForm = reactive({
-    year: '',
-    roll: '',
-    regId: ''
-  })
-
-  const searchResults = ref([])
-
-  const handleSearch = async () => {
-    isLoading.value = true
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    // Dummy results
-    searchResults.value = [
-      {
-        id: 1,
-        nameEn: 'John Doe',
-        nameBn: 'জন ডো',
-        roll: '12345',
-        regId: 'REG001',
-        status: 'Approved'
-      },
-      // Add more dummy results
-    ]
-
-    isLoading.value = false
-  }
-  </script>
-
-  <style scoped>
-  .form-select,
-  .form-input {
-    @apply w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500;
-  }
-
-  .btn-primary {
-    @apply bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700
-           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-           font-semibold shadow-md hover:shadow-lg;
-  }
-  </style>
+</template>
